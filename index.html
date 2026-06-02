@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RACE DAY — Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#13171c; --ink-mid:#3a4250; --ink-light:#7b8694;
+  --bg:#f4f6f8; --card:#ffffff; --line:rgba(20,24,30,0.10); --line-mid:rgba(20,24,30,0.16);
+  --red:#E23030; --red-dark:#B81E1E;
+  --blue:#1763C9; --blue-light:#E8F1FC;
+  --green:#1E9E5A; --green-light:#E2F4EA; --green-text:#136B3C;
+  --gold:#E0A21A; --gold-light:#FBF3DD; --gold-text:#9a7a1f;
+  --charlotte:#1763C9; --cape:#1E9E5A; --sarasota:#8B3FD4; --sprint:#E0651A; --strength:#E23030; --rest:#7b8694; --roller:#0E9CA8;
+  --shadow:0 1px 3px rgba(20,24,30,0.08),0 4px 16px rgba(20,24,30,0.06);
+  --shadow-lg:0 8px 30px rgba(20,24,30,0.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Raleway',sans-serif;-webkit-font-smoothing:antialiased;font-size:17px;}
+body{padding-bottom:92px;}
+h1,h2,h3,h4,.cond{font-family:'Barlow Condensed',sans-serif;letter-spacing:0.01em;}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.18);}
+.topbar .brand{font-family:'Barlow Condensed';font-weight:900;font-size:24px;letter-spacing:0.04em;text-transform:uppercase;display:flex;align-items:center;gap:9px;}
+.topbar .brand .dot{width:11px;height:11px;background:var(--red);border-radius:2px;transform:rotate(45deg);}
+.topbar .role select{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:7px;padding:5px 8px;font-size:11px;font-weight:700;font-family:'Raleway';text-transform:uppercase;letter-spacing:0.06em;}
+.demo-banner{background:var(--gold-light);border-bottom:1px solid var(--line);color:var(--gold-text);font-size:11.5px;font-weight:700;text-align:center;padding:6px 12px;letter-spacing:0.03em;text-transform:uppercase;}
+
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px;}
+.view{display:none;animation:fade .25s ease;}
+.view.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.sec-h{font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-light);margin:4px 2px 12px;display:flex;align-items:center;justify-content:space-between;}
+.sec-h .link{font-size:11px;color:var(--blue);font-weight:700;cursor:pointer;letter-spacing:0.02em;text-transform:none;}
+
+/* ── messages on home ── */
+.msg-stack{margin-bottom:20px;display:flex;flex-direction:column;gap:10px;}
+.msg{border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);position:relative;overflow:hidden;touch-action:pan-y;}
+.msg.from-coach{background:linear-gradient(135deg,#13171c,#272f3a);color:#fff;}
+.msg.from-athlete{background:#fff;border:1px solid var(--line);}
+.msg .m-lab{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.msg.from-coach .m-lab{color:var(--red);}
+.msg.from-athlete .m-lab{color:var(--sarasota);}
+.msg .m-text{font-size:14.5px;line-height:1.42;font-weight:500;}
+.msg .m-meta{font-size:11px;opacity:0.6;margin-top:7px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
+.msg .m-clear{background:none;border:none;font-size:11px;font-weight:700;cursor:pointer;padding:4px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.04em;}
+.msg.from-coach .m-clear{color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.25);}
+.msg.from-athlete .m-clear{color:var(--ink-light);border:1px solid var(--line-mid);}
+.msg .swipe-hint{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:10px;opacity:0.4;font-weight:600;}
+
+/* compose box */
+.compose{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:13px 14px;margin-bottom:20px;}
+.compose .c-lab{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-light);margin-bottom:8px;}
+.compose textarea{width:100%;border:1px solid var(--line-mid);border-radius:10px;padding:11px;font-size:15px;font-family:'Raleway';background:var(--bg);resize:vertical;min-height:52px;}
+.compose textarea:focus{outline:none;border-color:var(--blue);background:#fff;}
+.compose .c-send{margin-top:9px;background:var(--ink);color:#fff;border:none;border-radius:9px;padding:10px 18px;font-weight:700;font-size:13px;font-family:'Raleway';cursor:pointer;float:right;}
+.compose::after{content:'';display:block;clear:both;}
+
+.cal{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:16px 14px 18px;margin-bottom:20px;}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 4px;}
+.cal-head .mo{font-family:'Barlow Condensed';font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:0.03em;}
+.cal-nav{display:flex;gap:6px;}
+.cal-nav button{width:34px;height:34px;border:1px solid var(--line-mid);background:var(--card);border-radius:9px;font-size:17px;color:var(--ink-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.dow{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;}
+.dow span{text-align:center;font-size:10.5px;font-weight:800;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.05em;}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cell{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;font-weight:700;font-size:15px;color:var(--ink-mid);background:transparent;border:1.5px solid transparent;transition:.12s;}
+.cell.empty{cursor:default;}
+.cell.has:hover{background:var(--bg);}
+.cell.today{border-color:var(--red);color:var(--red);font-weight:800;}
+.cell.sel{background:var(--ink);color:#fff;}
+.cell.sel .tag{filter:brightness(2.4);}
+.cell .tag{position:absolute;bottom:5px;width:18px;height:3.5px;border-radius:2px;}
+.cell.before{opacity:0.32;}
+.cell .done-dot{position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--green);}
+.cell .note-mark{position:absolute;top:4px;left:6px;font-size:9px;color:var(--red);}
+.cell .skip-mark{position:absolute;top:4px;right:6px;font-size:9px;color:var(--ink-light);font-weight:800;}
+.cell .event-bar{position:absolute;bottom:2px;left:4px;right:4px;height:3px;border-radius:2px;}
+
+.week-strip{margin-bottom:22px;}
+.week-cards{display:flex;flex-direction:column;gap:9px;}
+.day-card{background:var(--card);border-radius:13px;box-shadow:var(--shadow);padding:13px 15px;display:flex;align-items:center;gap:13px;cursor:pointer;border-left:4px solid var(--line-mid);transition:.14s;}
+.day-card:active{transform:scale(0.992);}
+.day-card.is-today{border-left-color:var(--red);background:linear-gradient(90deg,rgba(226,48,48,0.045),transparent 60%);}
+.day-card.rest{opacity:0.72;}
+.day-card .dc-date{flex-shrink:0;width:42px;text-align:center;}
+.day-card .dc-dow{font-family:'Barlow Condensed';font-weight:800;font-size:13px;text-transform:uppercase;color:var(--ink-light);line-height:1;}
+.day-card .dc-num{font-family:'Barlow Condensed';font-weight:900;font-size:24px;line-height:1;}
+.day-card.is-today .dc-num{color:var(--red);}
+.day-card .dc-body{flex:1;min-width:0;}
+.day-card .dc-title{font-weight:700;font-size:15px;line-height:1.25;margin-bottom:5px;}
+.day-card .dc-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.day-card .dc-arrow{flex-shrink:0;color:var(--ink-light);font-size:20px;}
+.day-card .today-flag{display:inline-block;background:var(--red);color:#fff;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:4px;margin-left:7px;vertical-align:middle;}
+.day-card .note-chip{font-size:9px;color:var(--red);font-weight:800;}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:3px 8px;border-radius:6px;color:#fff;}
+.b-charlotte{background:var(--charlotte);} .b-cape{background:var(--cape);} .b-sarasota{background:var(--sarasota);}
+.b-sprint{background:var(--sprint);} .b-strength{background:var(--strength);} .b-rest{background:var(--rest);} .b-roller{background:var(--roller);}
+.badge.ghost{background:transparent;color:var(--ink-light);border:1px solid var(--line-mid);}
+.session-tag{font-size:10px;font-weight:800;letter-spacing:0.05em;color:var(--ink-light);background:var(--bg);border:1px solid var(--line);padding:2px 7px;border-radius:5px;text-transform:uppercase;}
+
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:14px;color:var(--ink-mid);background:none;border:none;cursor:pointer;padding:6px 2px;margin-bottom:8px;}
+.day-hero{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px;}
+.day-hero .dh-date{font-family:'Barlow Condensed';font-weight:900;font-size:30px;text-transform:uppercase;line-height:1;margin-bottom:9px;}
+.day-hero .dh-badges{display:flex;flex-wrap:wrap;gap:6px;}
+
+.fb-box{background:var(--gold-light);border:1px solid rgba(224,162,26,0.3);border-radius:14px;padding:14px 15px;margin-bottom:16px;}
+.fb-box .fb-lab{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold-text);margin-bottom:7px;display:flex;align-items:center;gap:6px;}
+.fb-box .fb-text{font-size:14.5px;line-height:1.45;color:var(--ink);font-weight:500;}
+.fb-box textarea{width:100%;border:1px solid rgba(224,162,26,0.4);border-radius:10px;padding:11px;font-size:15px;font-family:'Raleway';background:#fff;resize:vertical;min-height:60px;}
+.fb-box textarea:focus{outline:none;border-color:var(--gold);}
+.fb-box .fb-save{margin-top:9px;background:var(--gold-text);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-weight:700;font-size:13px;font-family:'Raleway';cursor:pointer;}
+
+.session{background:var(--card);border-radius:16px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;}
+.session-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(20,24,30,0.015),transparent);}
+.session-head .sh-l{display:flex;align-items:center;gap:10px;}
+.session-head .sh-tag{font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fff;background:var(--ink-mid);padding:3px 8px;border-radius:5px;}
+.session-head .sh-name{font-family:'Barlow Condensed';font-weight:800;font-size:21px;text-transform:uppercase;}
+.session-body{padding:8px 14px 14px;}
+
+.move{border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-top:10px;}
+.move.done{background:var(--green-light);border-color:rgba(30,158,90,0.3);}
+.move.skill{border-left:3px solid var(--roller);}
+.move-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.move-name{font-family:'Barlow Condensed';font-weight:800;font-size:19px;line-height:1.05;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.move-type-tag{font-size:9px;font-family:'Raleway';font-weight:800;text-transform:uppercase;letter-spacing:0.05em;padding:2px 6px;border-radius:4px;}
+.tt-skill{background:rgba(14,156,168,0.12);color:#0a7e88;}
+.tt-strength{background:rgba(226,48,48,0.1);color:var(--red-dark);}
+.move-spec{margin-top:8px;display:flex;flex-direction:column;gap:3px;}
+.move-spec .row{font-size:13.5px;color:var(--ink-mid);}
+.move-spec .row b{color:var(--ink);font-weight:700;}
+.move-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.btn{font-family:'Raleway';font-weight:700;font-size:13.5px;border-radius:9px;padding:9px 14px;cursor:pointer;border:1px solid var(--line-mid);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;gap:6px;}
+.btn:active{transform:scale(0.97);}
+.btn.log{background:var(--ink);color:#fff;border-color:var(--ink);}
+.btn.check{background:var(--card);color:var(--green-text);border-color:rgba(30,158,90,0.4);}
+.btn.check.on{background:var(--green);color:#fff;border-color:var(--green);}
+.btn.video{background:var(--blue-light);color:var(--blue);border-color:rgba(23,99,201,0.25);}
+.btn.notes{background:#fff;color:var(--roller);border-color:rgba(14,156,168,0.35);}
+
+.carry{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;}
+.chip{flex:1;min-width:120px;border-radius:9px;padding:8px 10px;background:var(--bg);border:1px solid var(--line);}
+.chip .lab{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-light);margin-bottom:2px;}
+.chip .val{font-size:15px;font-weight:700;font-family:'Barlow Condensed';}
+.chip.pr{background:var(--gold-light);border-color:rgba(224,162,26,0.35);}
+.chip.pr .lab{color:var(--gold-text);}
+.chip.none .val{color:var(--ink-light);font-weight:600;font-size:13px;font-family:'Raleway';}
+.skill-note-show{margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13.5px;color:var(--ink-mid);}
+.skill-note-show b{color:var(--ink);}
+
+.rest-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:30px 20px;text-align:center;}
+.rest-card .icon{font-size:34px;margin-bottom:8px;}
+.rest-card h3{font-family:'Barlow Condensed';font-weight:800;font-size:24px;text-transform:uppercase;margin-bottom:5px;}
+.rest-card p{color:var(--ink-light);font-size:14px;}
+.event-card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:14px 15px;margin-bottom:14px;border-left:4px solid var(--rest);}
+.event-card .ev-type{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;}
+.event-card .ev-title{font-family:'Barlow Condensed';font-weight:800;font-size:21px;text-transform:uppercase;line-height:1.05;}
+.event-card .ev-dates{font-size:12.5px;color:var(--ink-light);margin-top:5px;font-weight:600;}
+.skip-banner{background:#f0f1f3;border:1px solid var(--line-mid);border-radius:14px;padding:13px 15px;margin-bottom:14px;}
+.skip-banner .sk-lab{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-mid);margin-bottom:4px;}
+.skip-banner .sk-reason{font-size:14px;color:var(--ink-mid);font-style:italic;}
+.skip-btn{width:100%;border:1px solid var(--line-mid);background:var(--card);border-radius:11px;padding:13px;font-weight:700;font-size:14px;color:var(--ink-light);cursor:pointer;margin-top:4px;font-family:'Raleway';}
+.skip-btn.undo{color:var(--ink-mid);}
+
+.modal-bg{position:fixed;inset:0;background:rgba(15,18,22,0.5);z-index:100;display:none;align-items:flex-end;justify-content:center;animation:fade .2s;}
+.modal-bg.show{display:flex;}
+.modal{background:var(--card);width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:90vh;overflow-y:auto;animation:slideup .26s cubic-bezier(.2,.8,.2,1);}
+@keyframes slideup{from{transform:translateY(100%);}to{transform:none;}}
+.modal-grab{width:38px;height:4px;background:var(--line-mid);border-radius:3px;margin:0 auto 14px;}
+.modal h3{font-family:'Barlow Condensed';font-weight:800;font-size:24px;text-transform:uppercase;margin-bottom:2px;}
+.modal .sub{color:var(--ink-light);font-size:13px;margin-bottom:16px;}
+.set-row{display:grid;grid-template-columns:30px 1fr 1fr 38px;gap:8px;align-items:center;margin-bottom:9px;}
+.set-row .sn{font-family:'Barlow Condensed';font-weight:800;font-size:16px;color:var(--ink-light);text-align:center;}
+.set-row input{width:100%;border:1px solid var(--line-mid);border-radius:9px;padding:11px 10px;font-size:16px;font-family:'Raleway';font-weight:600;text-align:center;background:var(--bg);}
+.set-row input:focus{outline:none;border-color:var(--blue);background:#fff;}
+.field-labels{display:grid;grid-template-columns:30px 1fr 1fr 38px;gap:8px;margin-bottom:6px;}
+.field-labels span{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-light);text-align:center;}
+.add-set{width:100%;border:1px dashed var(--line-mid);background:none;border-radius:9px;padding:10px;font-weight:700;font-size:13px;color:var(--ink-mid);cursor:pointer;margin-top:4px;}
+.note-in{width:100%;border:1px solid var(--line-mid);border-radius:9px;padding:11px;font-size:15px;font-family:'Raleway';margin-top:14px;resize:vertical;min-height:54px;background:var(--bg);}
+.note-in:focus{outline:none;border-color:var(--blue);background:#fff;}
+.note-in.big{min-height:120px;margin-top:0;}
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+.modal-actions .btn{flex:1;justify-content:center;padding:13px;font-size:15px;}
+.modal-actions .save{background:var(--red);color:#fff;border-color:var(--red);}
+
+.prog-pick{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;-webkit-overflow-scrolling:touch;}
+.prog-pick button{flex-shrink:0;border:1px solid var(--line-mid);background:var(--card);border-radius:20px;padding:8px 15px;font-weight:700;font-size:13px;color:var(--ink-mid);cursor:pointer;white-space:nowrap;}
+.prog-pick button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat{background:var(--card);border-radius:13px;box-shadow:var(--shadow);padding:14px 10px;text-align:center;}
+.stat .v{font-family:'Barlow Condensed';font-weight:900;font-size:28px;line-height:1;}
+.stat .l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-light);margin-top:5px;}
+.stat.pr .v{color:var(--gold-text);}
+.stat.last .v{color:var(--blue);}
+.chart-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px;}
+.chart-card h4{font-family:'Barlow Condensed';font-weight:800;font-size:18px;text-transform:uppercase;margin-bottom:4px;}
+.chart-card .cc-sub{font-size:12px;color:var(--ink-light);margin-bottom:12px;}
+.chart-wrap{position:relative;height:190px;}
+.hist-list{margin-top:8px;}
+.hist-row{display:flex;align-items:center;justify-content:space-between;padding:11px 2px;border-bottom:1px solid var(--line);}
+.hist-row:last-child{border:none;}
+.hist-row .hd{font-weight:700;font-size:14px;}
+.hist-row .hd small{display:block;color:var(--ink-light);font-weight:500;font-size:12px;margin-top:2px;}
+.hist-row .hv{font-family:'Barlow Condensed';font-weight:800;font-size:17px;text-align:right;}
+
+/* dropdown (tracked moves) */
+.dropdown{background:var(--card);border-radius:13px;box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;}
+.dropdown .dd-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:'Barlow Condensed';font-weight:800;font-size:16px;text-transform:uppercase;}
+.dropdown .dd-head .chev{transition:.2s;color:var(--ink-light);}
+.dropdown.open .dd-head .chev{transform:rotate(180deg);}
+.dropdown .dd-body{display:none;padding:0 16px 8px;}
+.dropdown.open .dd-body{display:block;}
+.track-row{display:flex;align-items:center;justify-content:space-between;padding:11px 2px;border-top:1px solid var(--line);}
+.track-row .tr-name{font-weight:700;font-size:14px;}
+.track-row .tr-sub{font-size:10.5px;color:var(--ink-light);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;margin-top:2px;}
+.sw{width:46px;height:27px;border-radius:14px;background:var(--line-mid);position:relative;cursor:pointer;transition:.18s;flex-shrink:0;}
+.sw.on{background:var(--green);}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.sw.on::after{left:22px;}
+
+/* ── BUILDER ── */
+.builder-note{background:#fff;border:1px solid var(--sarasota);border-left:4px solid var(--sarasota);border-radius:12px;padding:13px 14px;margin-bottom:18px;}
+.builder-note .bn-lab{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--sarasota);margin-bottom:5px;}
+.builder-note .bn-text{font-size:14px;line-height:1.4;font-weight:500;}
+.build-days{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:18px;}
+.build-weeknav{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:11px;box-shadow:var(--shadow);padding:8px 12px;margin-bottom:10px;}
+.build-weeknav button{width:32px;height:32px;border:1px solid var(--line-mid);background:var(--card);border-radius:8px;font-size:16px;color:var(--ink-mid);cursor:pointer;}
+.build-weeknav .bw-label{font-family:'Barlow Condensed';font-weight:800;font-size:17px;text-transform:uppercase;}
+.build-jump{display:flex;gap:8px;margin-bottom:14px;}
+.build-jump button{flex:1;border:1px solid var(--line-mid);background:var(--card);border-radius:9px;padding:9px;font-weight:700;font-size:13px;color:var(--ink-mid);cursor:pointer;font-family:'Raleway';}
+.build-jump button:last-child{background:var(--blue-light);color:var(--blue);border-color:rgba(23,99,201,0.25);}
+.build-day{flex-shrink:0;width:54px;border:1.5px solid var(--line-mid);border-radius:12px;padding:9px 0;text-align:center;cursor:pointer;background:var(--card);position:relative;}
+.build-day .bd-event{position:absolute;bottom:3px;left:6px;right:6px;height:3px;border-radius:2px;}
+.bc-event{background:var(--card);border-radius:11px;box-shadow:var(--shadow);padding:11px 13px;margin-bottom:12px;border-left:4px solid var(--rest);display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:600;}
+.bc-ev-type{font-weight:800;text-transform:uppercase;font-size:11px;letter-spacing:0.04em;margin-right:4px;}
+.bc-shared{font-size:9px;background:var(--gold-light);color:var(--gold-text);padding:2px 6px;border-radius:4px;font-weight:800;text-transform:uppercase;margin-left:4px;}
+.bc-add-row{display:flex;gap:8px;}
+.bc-add.tmpl{border-color:var(--sarasota);color:var(--sarasota);background:rgba(139,63,212,0.07);border-style:solid;margin-top:0;}
+.bc-swap{background:none;border:1px solid var(--line-mid);border-radius:6px;font-size:10px;font-weight:700;color:var(--ink-light);padding:3px 7px;cursor:pointer;margin-right:6px;text-transform:uppercase;}
+.copy-athletes{display:flex;flex-direction:column;gap:7px;margin-bottom:8px;}
+.ca-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line-mid);border-radius:9px;padding:11px 13px;cursor:pointer;font-weight:600;font-size:14px;}
+.ca-item.on{border-color:var(--green);background:var(--green-light);}
+.ca-item .ca-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--line-mid);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--green-text);}
+.ca-item.on .ca-check{border-color:var(--green);background:#fff;}
+.build-day.sel{background:var(--ink);color:#fff;border-color:var(--ink);}
+.build-day.today{border-color:var(--red);}
+.build-day .bd-dow{font-family:'Barlow Condensed';font-weight:800;font-size:12px;text-transform:uppercase;}
+.build-day .bd-num{font-family:'Barlow Condensed';font-weight:900;font-size:20px;line-height:1.1;}
+.build-day .bd-dot{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;}
+.build-canvas{min-height:120px;}
+.bc-session{background:var(--card);border-radius:14px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;}
+.bc-session-head{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.bc-session-head input{font-family:'Barlow Condensed';font-weight:800;font-size:18px;border:none;background:none;text-transform:uppercase;width:60%;}
+.bc-session-head input:focus{outline:none;border-bottom:2px solid var(--blue);}
+.bc-session-head .seg{display:flex;gap:4px;}
+.bc-session-head .seg button{font-size:11px;font-weight:800;padding:4px 9px;border-radius:6px;border:1px solid var(--line-mid);background:var(--card);cursor:pointer;color:var(--ink-mid);}
+.bc-session-head .seg button.on{background:var(--ink-mid);color:#fff;border-color:var(--ink-mid);}
+.bc-del{background:none;border:none;color:var(--ink-light);font-size:18px;cursor:pointer;}
+.bc-moves{padding:8px 12px 12px;}
+.bc-move{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px;}
+.bc-move .bm-top{display:flex;align-items:center;justify-content:space-between;}
+.bc-move .bm-name{font-family:'Barlow Condensed';font-weight:800;font-size:16px;}
+.bc-move .bm-pills{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap;}
+.bc-move .bm-pill{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;padding:3px 7px;border-radius:5px;background:var(--bg);border:1px solid var(--line);color:var(--ink-mid);}
+.bc-move .bm-spec{font-size:12.5px;color:var(--ink-light);margin-top:6px;}
+.bc-add{width:100%;border:1px dashed var(--line-mid);background:none;border-radius:10px;padding:11px;font-weight:700;font-size:13px;color:var(--ink-mid);cursor:pointer;margin-top:10px;}
+.bc-add.session{border-color:var(--blue);color:var(--blue);background:var(--blue-light);border-style:solid;margin-top:0;}
+.bc-rest-toggle{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:13px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:16px;}
+.bc-rest-toggle .rt-name{font-weight:700;font-size:15px;}
+.bc-save-day{width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:15px;font-weight:800;font-size:15px;font-family:'Raleway';cursor:pointer;margin-top:6px;}
+
+/* library picker */
+.lib-search{width:100%;border:1px solid var(--line-mid);border-radius:10px;padding:12px;font-size:15px;font-family:'Raleway';background:var(--bg);margin-bottom:12px;}
+.lib-search:focus{outline:none;border-color:var(--blue);background:#fff;}
+.cat-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px;}
+.cat-tabs button{flex-shrink:0;border:1px solid var(--line-mid);background:var(--card);border-radius:18px;padding:6px 13px;font-weight:700;font-size:12px;color:var(--ink-mid);cursor:pointer;white-space:nowrap;}
+.cat-tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.lib-cat-h{font-family:'Barlow Condensed';font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-light);margin:14px 2px 8px;}
+.lib-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;cursor:pointer;}
+.lib-item:active{background:var(--bg);}
+.lib-item .li-name{font-weight:700;font-size:15px;}
+.lib-item .li-sub{font-size:11px;color:var(--ink-light);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;margin-top:3px;}
+.lib-item .li-type{font-size:9px;font-weight:800;text-transform:uppercase;padding:3px 7px;border-radius:5px;}
+.lib-new{background:var(--ink);color:#fff;border:none;border-radius:10px;padding:13px;font-weight:700;font-size:14px;width:100%;cursor:pointer;margin-top:4px;}
+.mv-edit-field{margin-bottom:12px;}
+.mv-edit-field label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-light);display:block;margin-bottom:5px;}
+.mv-edit-field input,.mv-edit-field textarea{width:100%;border:1px solid var(--line-mid);border-radius:9px;padding:11px;font-size:15px;font-family:'Raleway';background:var(--bg);}
+.mv-edit-field input:focus,.mv-edit-field textarea:focus{outline:none;border-color:var(--blue);background:#fff;}
+.mv-toggle-row{display:flex;gap:10px;margin-bottom:12px;}
+.mv-toggle-row .mvt{flex:1;border:1px solid var(--line-mid);border-radius:9px;padding:10px;text-align:center;cursor:pointer;font-weight:700;font-size:13px;color:var(--ink-mid);}
+.mv-toggle-row .mvt.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;z-index:60;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 12px rgba(20,24,30,0.06);}
+.bnav button{flex:1;border:none;background:none;padding:11px 0 9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink-light);}
+.bnav button.on{color:var(--red);}
+.bnav button.hidden{display:none;}
+.bnav .ic{font-size:21px;line-height:1;}
+.bnav .lb{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;}
+.bnav .badge-dot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;background:var(--red);border-radius:50%;}
+
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:11px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:200;box-shadow:var(--shadow-lg);max-width:90%;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.empty-hint{color:var(--ink-light);font-size:14px;text-align:center;padding:24px 10px;line-height:1.5;}
+/* ── v5 additions ── */
+.avail-hint{background:rgba(14,156,168,0.08);border:1px solid rgba(14,156,168,0.25);border-radius:11px;padding:11px 13px;margin-bottom:14px;font-size:14.5px;color:var(--ink-mid);line-height:1.4;}
+.avail-hint .ah-lab{font-weight:800;color:#0a7e88;text-transform:uppercase;font-size:11.5px;letter-spacing:0.04em;}
+.avail-edit{margin-bottom:11px;}
+.avail-edit label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-light);display:block;margin-bottom:5px;}
+.avail-in{width:100%;border:1px solid var(--line-mid);border-radius:9px;padding:11px;font-size:15px;font-family:'Raleway';background:var(--bg);}
+.avail-in:focus{outline:none;border-color:var(--blue);background:#fff;}
+.spec-edit-row{display:flex;gap:8px;align-items:center;margin-bottom:9px;}
+.spec-edit-row .se-key{flex:0 0 38%;border:1px solid var(--line-mid);border-radius:9px;padding:11px;font-size:15px;font-family:'Raleway';background:var(--bg);}
+.spec-edit-row .se-val{flex:1;border:1px solid var(--line-mid);border-radius:9px;padding:11px;font-size:15px;font-family:'Raleway';background:var(--bg);}
+.spec-edit-row input:focus{outline:none;border-color:var(--blue);background:#fff;}
+.bm-edit-hint{font-size:11px;font-family:'Raleway';font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.04em;margin-left:4px;}
+.bc-move .bm-name{cursor:pointer;}
+.bc-move .bm-spec{cursor:pointer;}
+.copy-all{display:flex;align-items:center;gap:10px;border:1px solid var(--ink-mid);border-radius:9px;padding:11px 13px;cursor:pointer;font-weight:700;font-size:14px;margin-bottom:10px;background:var(--bg);}
+.copy-all.on{background:var(--green-light);border-color:var(--green);}
+.copy-all .ca-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--ink-mid);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--green-text);}
+.track-note{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:13px 15px;margin-bottom:16px;font-size:14px;color:var(--ink-mid);line-height:1.4;}
+.session-skipped{opacity:0.85;}
+.session-head .sh-skip{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-light);}
+.skip-btn.small{padding:11px;font-size:13.5px;margin-top:10px;}
+/* readability bumps */
+.move-spec .row{font-size:15px;}
+.chip .val{font-size:17px;}
+.day-card .dc-title{font-size:16.5px;}
+.badge{font-size:11px;}
+.btn{font-size:14.5px;}
+.move-name{font-size:20px;}
+.session-head .sh-name{font-size:22px;}
+.cell{font-size:16px;}
+.fb-box .fb-text{font-size:15.5px;}
+.msg .m-text{font-size:15.5px;}
+/* ── production additions: login, switcher, coach notes, toggles, loading ── */
+.login-screen{position:fixed;inset:0;background:var(--ink);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-card{background:var(--card);border-radius:20px;box-shadow:var(--shadow-lg);padding:30px 26px;width:100%;max-width:380px;}
+.login-card .lc-brand{font-family:'Barlow Condensed';font-weight:900;font-size:34px;letter-spacing:0.04em;text-transform:uppercase;display:flex;align-items:center;gap:11px;margin-bottom:4px;}
+.login-card .lc-brand .dot{width:14px;height:14px;background:var(--red);border-radius:3px;transform:rotate(45deg);}
+.login-card .lc-sub{color:var(--ink-light);font-size:14px;margin-bottom:24px;}
+.login-card label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-light);display:block;margin-bottom:6px;margin-top:14px;}
+.login-card input{width:100%;border:1px solid var(--line-mid);border-radius:11px;padding:14px;font-size:16px;font-family:'Raleway';background:var(--bg);}
+.login-card input:focus{outline:none;border-color:var(--blue);background:#fff;}
+.login-card .lc-go{width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:15px;font-weight:800;font-size:16px;font-family:'Raleway';cursor:pointer;margin-top:22px;}
+.login-card .lc-go:disabled{opacity:0.5;}
+.login-card .lc-err{color:var(--red-dark);font-size:13.5px;font-weight:600;margin-top:14px;min-height:18px;text-align:center;}
+.login-card .lc-hint{color:var(--ink-light);font-size:12px;text-align:center;margin-top:16px;line-height:1.5;}
+
+.topbar .switcher{display:flex;align-items:center;gap:8px;}
+.topbar .switcher select{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:7px;padding:5px 8px;font-size:12px;font-weight:700;font-family:'Raleway';max-width:140px;}
+.topbar .logout{background:none;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);border-radius:7px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:0.04em;}
+.role-pill{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.55);}
+
+/* full-screen loading + inline spinner */
+.app-loading{position:fixed;inset:0;background:var(--bg);z-index:280;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+.spinner{width:34px;height:34px;border:3px solid var(--line-mid);border-top-color:var(--red);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.app-loading .ld-text{font-family:'Barlow Condensed';font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-light);}
+.inline-load{display:flex;align-items:center;justify-content:center;padding:40px 0;}
+
+/* message visibility control on compose */
+.vis-row{display:flex;gap:8px;margin-bottom:9px;}
+.vis-row .vis-opt{flex:1;border:1px solid var(--line-mid);border-radius:8px;padding:8px;text-align:center;cursor:pointer;font-weight:700;font-size:12px;color:var(--ink-mid);}
+.vis-row .vis-opt.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.msg .m-vis{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;padding:2px 6px;border-radius:4px;margin-left:6px;}
+.msg .m-vis.private{background:rgba(226,48,48,0.14);color:var(--red-dark);}
+.msg .m-vis.shared{background:var(--green-light);color:var(--green-text);}
+.msg.from-coach .m-vis.private{background:rgba(255,255,255,0.18);color:#fff;}
+
+/* coach-private notes view */
+.cn-block{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:15px 16px;margin-bottom:14px;}
+.cn-block .cn-lab{font-family:'Barlow Condensed';font-weight:800;font-size:17px;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+.cn-block .cn-lab .pin{width:7px;height:7px;border-radius:50%;}
+.cn-block textarea{width:100%;border:1px solid var(--line-mid);border-radius:10px;padding:12px;font-size:15px;font-family:'Raleway';background:var(--bg);resize:vertical;min-height:80px;line-height:1.45;}
+.cn-block textarea:focus{outline:none;border-color:var(--blue);background:#fff;}
+.cn-save{background:var(--ink);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-weight:700;font-size:13px;font-family:'Raleway';cursor:pointer;margin-top:9px;}
+.cn-quick{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:15px 16px;}
+.cn-quick .cq-add{display:flex;gap:8px;margin-bottom:14px;}
+.cn-quick .cq-add textarea{flex:1;border:1px solid var(--line-mid);border-radius:10px;padding:11px;font-size:15px;font-family:'Raleway';background:var(--bg);resize:vertical;min-height:46px;}
+.cn-quick .cq-add textarea:focus{outline:none;border-color:var(--blue);background:#fff;}
+.cn-quick .cq-add button{background:var(--red);color:#fff;border:none;border-radius:10px;padding:0 16px;font-weight:800;font-size:14px;cursor:pointer;font-family:'Raleway';flex-shrink:0;}
+.cq-entry{border-top:1px solid var(--line);padding:11px 2px;}
+.cq-entry:first-of-type{border-top:none;}
+.cq-entry .cq-time{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-light);margin-bottom:4px;}
+.cq-entry .cq-text{font-size:14.5px;line-height:1.45;color:var(--ink);white-space:pre-wrap;}
+.coach-only-banner{background:rgba(226,48,48,0.06);border:1px solid rgba(226,48,48,0.2);border-radius:11px;padding:10px 13px;margin-bottom:16px;font-size:12.5px;font-weight:700;color:var(--red-dark);text-transform:uppercase;letter-spacing:0.03em;display:flex;align-items:center;gap:7px;}
+
+/* chart-visibility toggles (coach) */
+.toggle-note{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--ink-mid);line-height:1.4;}
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="lc-brand"><span class="dot"></span>RACE DAY</div>
+    <div class="lc-sub">BMX training — sign in to continue</div>
+    <label for="liEmail">Username</label>
+    <input id="liEmail" type="text" autocapitalize="none" autocomplete="username" placeholder="username" inputmode="email">
+    <label for="liPin">PIN</label>
+    <input id="liPin" type="password" autocomplete="current-password" placeholder="••••" inputmode="numeric">
+    <button class="lc-go" id="liGo" onclick="doLogin()">Sign in</button>
+    <div class="lc-err" id="liErr"></div>
+    <div class="lc-hint">Forgot your PIN? Text Michelle for help.</div>
+  </div>
+</div>
+
+<!-- APP LOADING -->
+<div class="app-loading" id="appLoading" style="display:none;">
+  <div class="spinner"></div>
+  <div class="ld-text" id="appLoadText">Loading…</div>
+</div>
+
+<!-- APP -->
+<div id="appRoot" style="display:none;">
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span><span id="brandName">RACE DAY</span></div>
+  <div class="switcher">
+    <span class="role-pill" id="rolePill"></span>
+    <select id="athleteSel" onchange="switchAthlete(this.value)" style="display:none;"></select>
+    <button class="logout" onclick="doLogout()">Exit</button>
+  </div>
+</div>
+
+<!-- HOME / CALENDAR -->
+<div class="view active" id="view-cal">
+  <div class="wrap">
+    <div id="msgStack" class="msg-stack"></div>
+    <div id="availHome"></div>
+    <div id="composeWrap"></div>
+    <div class="cal">
+      <div class="cal-head">
+        <div class="mo" id="calMo">—</div>
+        <div class="cal-nav"><button onclick="calShift(-1)">‹</button><button onclick="calShift(1)">›</button></div>
+      </div>
+      <div class="dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+      <div class="grid" id="calGrid"></div>
+    </div>
+    <div class="week-strip">
+      <div class="sec-h"><span id="weekLabel">This Week</span></div>
+      <div class="week-cards" id="weekCards"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY -->
+<div class="view" id="view-day">
+  <div class="wrap"><button class="back-btn" onclick="go('cal')">‹ Back to calendar</button><div id="dayContent"></div></div>
+</div>
+
+<!-- PROGRESS -->
+<div class="view" id="view-prog">
+  <div class="wrap">
+    <div class="sec-h">Progression</div>
+    <div id="trackDropdown"></div>
+    <div class="prog-pick" id="progPick"></div>
+    <div class="stat-row" id="progStats"></div>
+    <div class="chart-card"><h4 id="chartTitle">—</h4><div class="cc-sub">Top working load per session</div><div class="chart-wrap"><canvas id="progChart"></canvas></div></div>
+    <div class="chart-card"><h4>Session History</h4><div class="cc-sub">Every logged entry for this move</div><div class="hist-list" id="histList"></div></div>
+  </div>
+</div>
+
+<!-- BUILD (coach only) -->
+<div class="view" id="view-build">
+  <div class="wrap">
+    <div class="sec-h">Build the Week</div>
+    <div id="builderNote"></div>
+    <div id="buildNav"></div>
+    <div class="build-days" id="buildDays"></div>
+    <div id="buildCanvas" class="build-canvas"></div>
+  </div>
+</div>
+
+<!-- NOTES (coach only — coach-private per athlete) -->
+<div class="view" id="view-notes">
+  <div class="wrap">
+    <div class="sec-h">Coach Notes</div>
+    <div id="notesContent"></div>
+  </div>
+</div>
+
+<!-- MESSAGES history -->
+<div class="view" id="view-msgs">
+  <div class="wrap"><div class="sec-h">Messages</div><div id="msgHistory"></div></div>
+</div>
+
+<!-- Universal modal -->
+<div class="modal-bg" id="modalBg"><div class="modal" id="modalInner"></div></div>
+<div class="toast" id="toast"></div>
+
+<div class="bnav">
+  <button class="on" id="nav-cal" onclick="go('cal')"><span class="ic">▦</span><span class="lb">Plan</span></button>
+  <button id="nav-prog" onclick="go('prog')"><span class="ic">▲</span><span class="lb">Progress</span></button>
+  <button id="nav-build" onclick="go('build')"><span class="ic">✎</span><span class="lb">Build</span></button>
+  <button id="nav-notes" onclick="go('notes')"><span class="ic">◆</span><span class="lb">Notes</span></button>
+  <button id="nav-msgs" onclick="go('msgs')"><span class="ic">✉</span><span class="lb">Messages</span></button>
+</div>
+
+</div><!-- /appRoot -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   RACE DAY — production front-end. Talks only to /api/*.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── tiny API layer ── */
+async function api(path, opts){
+  const r = await fetch('/api/'+path, Object.assign({headers:{'Content-Type':'application/json'}}, opts||{}));
+  let j; try{ j = await r.json(); }catch(e){ j = {error:'Bad response'}; }
+  if(!r.ok || j.error){ throw new Error(j.error || ('HTTP '+r.status)); }
+  return j;
+}
+function qs(o){ return Object.keys(o).filter(k=>o[k]!=null).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(o[k])).join('&'); }
+function apiGet(file, params){ return api(file+'?'+qs(params)); }
+function apiPost(file, body){ return api(file, {method:'POST', body:JSON.stringify(body)}); }
+
+/* ── session ── */
+const SESSION_KEY='raceday_session';
+let SESSION=null;          // {role, name, athletes:[...]}
+let ATHLETE=null;          // currently-selected athlete {id,name,planProjectId,logProjectId,metaProjectId}
+let ROLE='athlete';        // coach | parent | athlete  (drives the UI exactly like v5's ROLE)
+
+/* ── per-athlete server state (loaded on switch) ── */
+let DAYS={};               // date -> day summary (label,badges,rest,note,skipped)
+let DAY_CACHE={};          // date -> full day (sessions+moves+feedback) lazy-loaded
+let LOG=[];                // log entries
+let CARRY={};              // exercise -> {last,pr}
+let LIBRARY=[];
+let TEMPLATES=[];
+let EVENTS=[];
+let AVAILABILITY={};
+let MESSAGES=[];
+let TOGGLES={};            // exercise -> bool (chart visibility; coach-controlled)
+let COACH_NOTES={goals:'',strengths:'',weaknesses:'',quick:[]};
+
+/* ── constants carried from v5 ── */
+const TODAY=new Date().toISOString().slice(0,10);
+const LOC={Charlotte:'b-charlotte',Cape:'b-cape','Cape Coral':'b-cape',Sarasota:'b-sarasota',Sprints:'b-sprint',Strength:'b-strength',Rest:'b-rest',Roller:'b-roller',Rollers:'b-roller'};
+const CATEGORIES=['Strength','Sprints','Roller','Track Work'];
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const EVENT_TYPES={race:{label:'Race',color:'#E0651A'},travel:{label:'Travel',color:'#8B3FD4'},worlds:{label:'Major',color:'#E23030'},camp:{label:'Camp',color:'#1763C9'},other:{label:'Note',color:'#7b8694'}};
+let eventId=1;
+let msgId=1;
+
+function iso(d){return d.toISOString().slice(0,10);}
+function parseISO(s){return new Date(s+'T12:00:00');}
+function fmtDate(s){const d=parseISO(s);return DOW[d.getDay()]+', '+MO[d.getMonth()]+' '+d.getDate();}
+let calY, calM, selDate=null;
+
+/* category drives behavior, exactly as v5 */
+function isStrengthCat(m){return (m.cat||'')==='Strength';}
+function moveTracked(m){return isStrengthCat(m);}
+function isTracked(move){return isStrengthCat(move);}
+
+/* ── auth flow ── */
+function showLogin(msg){
+  document.getElementById('appRoot').style.display='none';
+  document.getElementById('appLoading').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  if(msg)document.getElementById('liErr').textContent=msg;
+}
+async function doLogin(){
+  const email=document.getElementById('liEmail').value.trim();
+  const pin=document.getElementById('liPin').value.trim();
+  const err=document.getElementById('liErr');err.textContent='';
+  if(!email||!pin){err.textContent='Enter your username and PIN.';return;}
+  const btn=document.getElementById('liGo');btn.disabled=true;btn.textContent='Signing in…';
+  try{
+    const res=await apiPost('auth',{email,pin});
+    SESSION={role:res.role,name:res.name,athletes:res.athletes||[]};
+    try{ sessionStorage.setItem(SESSION_KEY, JSON.stringify({email,pin})); }catch(e){}
+    await enterApp();
+  }catch(e){
+    err.textContent=e.message||'Sign in failed.';
+    btn.disabled=false;btn.textContent='Sign in';
+  }
+}
+function doLogout(){
+  try{ sessionStorage.removeItem(SESSION_KEY); }catch(e){}
+  SESSION=null;ATHLETE=null;
+  document.getElementById('liEmail').value='';document.getElementById('liPin').value='';
+  document.getElementById('liGo').disabled=false;document.getElementById('liGo').textContent='Sign in';
+  showLogin('');
+}
+async function tryRestoreSession(){
+  let saved=null;try{ saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null'); }catch(e){}
+  if(!saved||!saved.email){showLogin('');return;}
+  try{
+    const res=await apiPost('auth',saved);
+    SESSION={role:res.role,name:res.name,athletes:res.athletes||[]};
+    await enterApp();
+  }catch(e){ showLogin(''); }
+}
+
+/* role mapping: coach sees Build + Notes; parent/athlete do not.
+   For message direction we treat coach as 'coach' and parent/athlete as 'athlete'. */
+function msgSide(){ return ROLE==='coach' ? 'coach' : 'athlete'; }
+function canBuild(){ return ROLE==='coach'; }
+
+async function enterApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appLoading').style.display='flex';
+  ROLE=SESSION.role;
+  // brand + role pill
+  document.getElementById('rolePill').textContent=ROLE;
+  // athlete switcher: coach + parent with >1 athlete get a dropdown
+  const sel=document.getElementById('athleteSel');
+  if(SESSION.athletes.length>1){
+    sel.style.display='';
+    sel.innerHTML=SESSION.athletes.map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
+  }else{ sel.style.display='none'; }
+  // nav visibility by role
+  document.getElementById('nav-build').classList.toggle('hidden', !canBuild());
+  document.getElementById('nav-notes').classList.toggle('hidden', !canBuild());
+  // pick first athlete
+  ATHLETE=SESSION.athletes[0]||null;
+  if(sel.value && SESSION.athletes.find(a=>a.id===sel.value)) ATHLETE=SESSION.athletes.find(a=>a.id===sel.value);
+  if(!ATHLETE){ showLogin('No athletes are linked to this login yet — text Michelle.'); return; }
+  await loadAthlete();
+  document.getElementById('appLoading').style.display='none';
+  document.getElementById('appRoot').style.display='';
+  // default calendar to current month
+  const t=parseISO(TODAY);calY=t.getFullYear();calM=t.getMonth();
+  go('cal');
+}
+async function switchAthlete(id){
+  const a=SESSION.athletes.find(x=>x.id===id);if(!a)return;
+  ATHLETE=a;
+  document.getElementById('appRoot').style.display='none';
+  document.getElementById('appLoading').style.display='flex';
+  document.getElementById('appLoadText').textContent='Loading '+a.name+'…';
+  await loadAthlete();
+  document.getElementById('appLoading').style.display='none';
+  document.getElementById('appRoot').style.display='';
+  go('cal');
+}
+
+/* load everything for the current athlete, in parallel where possible */
+async function loadAthlete(){
+  document.getElementById('appLoadText').textContent='Loading '+(ATHLETE?ATHLETE.name:'')+'…';
+  document.getElementById('brandName').textContent=(ATHLETE?ATHLETE.name.toUpperCase():'RACE DAY');
+  DAY_CACHE={};
+  const plan=ATHLETE.planProjectId, log=ATHLETE.logProjectId, meta=ATHLETE.metaProjectId;
+  const jobs=[
+    apiGet('plan',{action:'days',planProjectId:plan}).then(r=>{DAYS=r.days||{};}).catch(()=>{DAYS={};}),
+    apiGet('log',{action:'log',logProjectId:log}).then(r=>{LOG=r.entries||[];CARRY=r.carry||{};}).catch(()=>{LOG=[];CARRY={};}),
+    apiGet('plan',{action:'library',metaProjectId:meta}).then(r=>{LIBRARY=r.library||[];}).catch(()=>{LIBRARY=[];}),
+    apiGet('plan',{action:'templates',metaProjectId:meta}).then(r=>{TEMPLATES=r.templates||[];}).catch(()=>{TEMPLATES=[];}),
+    apiGet('plan',{action:'events',metaProjectId:meta}).then(r=>{EVENTS=(r.events||[]).map(normalizeEvent);}).catch(()=>{EVENTS=[];}),
+    apiGet('plan',{action:'availability',metaProjectId:meta}).then(r=>{AVAILABILITY=r.availability||{};}).catch(()=>{AVAILABILITY={};}),
+    apiGet('log',{action:'messages',metaProjectId:meta}).then(r=>{MESSAGES=r.messages||[];}).catch(()=>{MESSAGES=[];}),
+    apiGet('log',{action:'toggles',metaProjectId:meta}).then(r=>{TOGGLES=r.toggles||{};}).catch(()=>{TOGGLES={};})
+  ];
+  if(canBuild()){
+    jobs.push(apiGet('log',{action:'coach_notes',metaProjectId:meta}).then(r=>{COACH_NOTES=r.notes||COACH_NOTES;}).catch(()=>{}));
+  }
+  await Promise.all(jobs);
+  // id counters
+  eventId=EVENTS.reduce((m,e)=>Math.max(m,e.id||0),0)+1;
+  msgId=MESSAGES.reduce((m,e)=>Math.max(m,e.id||0),0)+1;
+}
+function normalizeEvent(e){return {id:e.id,date:e.date,end:e.end||null,type:e.type||'other',title:e.title||'',shared:!!e.shared};}
+
+/* ════ HOME ════ */
+function renderHome(){ renderMessages(); renderAvailHome(); renderCompose(); renderCal(); }
+
+/* messages now carry visibility: 'private' (coach↔parent only) or 'shared' (visible to athlete too).
+   Inbox rules:
+     coach  sees messages from athlete/parent (any visibility)
+     parent sees messages from coach (any visibility)
+     athlete sees messages from coach that are 'shared' only (not private parent↔coach) */
+function visibleToMe(m){
+  if(ROLE==='coach') return m.from!=='coach';
+  if(ROLE==='parent') return m.from==='coach';
+  /* athlete */ return m.from==='coach' && m.visibility==='shared';
+}
+function renderMessages(){
+  const stack=document.getElementById('msgStack');
+  const inbox=MESSAGES.filter(m=>!m.cleared && visibleToMe(m));
+  stack.innerHTML=inbox.map(m=>msgCard(m,true)).join('');
+}
+function whoLabel(m){
+  if(m.from==='coach')return 'From Coach';
+  if(m.from==='parent')return 'From Parent';
+  return 'From '+(ATHLETE?ATHLETE.name.split(' ')[0]:'Athlete');
+}
+function msgCard(m,swipeable){
+  const visPill = (ROLE==='coach'||ROLE==='parent')
+    ? `<span class="m-vis ${m.visibility==='shared'?'shared':'private'}">${m.visibility==='shared'?'shared':'private'}</span>` : '';
+  return `<div class="msg from-${m.from}" data-id="${m.id}">
+    <div class="m-lab">◆ ${whoLabel(m)}${visPill}</div>
+    <div class="m-text">${escapeHTML(m.text)}</div>
+    <div class="m-meta"><span>${fmtDate(m.date)}</span>
+      ${swipeable?`<button class="m-clear" onclick="clearMsg(${m.id})">Got it — archive</button>`:''}
+    </div></div>`;
+}
+let composeVis='shared';
+function renderCompose(){
+  const wrap=document.getElementById('composeWrap');
+  const to = ROLE==='coach' ? (ATHLETE?ATHLETE.name.split(' ')[0]:'athlete') : 'Coach';
+  // coach & parent can choose private (coach↔parent) vs shared (athlete sees it). athlete posts to coach only.
+  const showVis = (ROLE==='coach'||ROLE==='parent');
+  wrap.innerHTML=`<div class="compose">
+    <div class="c-lab">✎ Message to ${to}</div>
+    ${showVis?`<div class="vis-row" id="visRow">
+      <div class="vis-opt ${composeVis==='shared'?'on':''}" onclick="setVis('shared')">Shared · athlete sees</div>
+      <div class="vis-opt ${composeVis==='private'?'on':''}" onclick="setVis('private')">Private · coach↔parent</div>
+    </div>`:''}
+    <textarea id="composeText" placeholder="${ROLE==='coach'?'Leave a note…':'Tell coach your schedule, how you feel, questions…'}"></textarea>
+    <button class="c-send" onclick="sendMsg()">Send</button>
+  </div>`;
+}
+function setVis(v){composeVis=v;renderCompose();}
+async function sendMsg(){
+  const t=document.getElementById('composeText').value.trim();if(!t){toast('Write something first');return;}
+  const vis = (ROLE==='coach'||ROLE==='parent') ? composeVis : 'shared';
+  const m={id:msgId++,from:ROLE,visibility:vis,text:t,date:TODAY,cleared:false};
+  MESSAGES.unshift(m);
+  document.getElementById('composeText').value='';
+  renderMessages();toast('Sent');
+  try{ await persistMessages(); }catch(e){ toast('Saved locally — sync failed'); }
+}
+async function clearMsg(id){
+  const m=MESSAGES.find(x=>x.id===id);if(m)m.cleared=true;
+  renderMessages();updateMsgBadge();toast('Archived to Messages');
+  try{ await persistMessages(); }catch(e){}
+}
+function persistMessages(){ return apiPost('log',{action:'save_messages',metaProjectId:ATHLETE.metaProjectId,messages:MESSAGES}); }
+
+/* swipe-to-archive (unchanged from v5) */
+let touchX=0,touchEl=null;
+document.addEventListener('touchstart',e=>{const c=e.target.closest('.msg');if(c&&c.querySelector('.m-clear')){touchEl=c;touchX=e.touches[0].clientX;}},{passive:true});
+document.addEventListener('touchmove',e=>{if(!touchEl)return;const dx=e.touches[0].clientX-touchX;if(dx>0){touchEl.style.transform='translateX('+Math.min(dx,120)+'px)';touchEl.style.opacity=1-Math.min(dx,120)/200;}},{passive:true});
+document.addEventListener('touchend',e=>{if(!touchEl)return;const dx=(e.changedTouches[0].clientX-touchX);if(dx>90){const id=+touchEl.dataset.id;touchEl.style.transform='translateX(100%)';touchEl.style.opacity=0;setTimeout(()=>clearMsg(id),180);}else{touchEl.style.transform='';touchEl.style.opacity='';}touchEl=null;});
+
+function renderMsgHistory(){
+  const wrap=document.getElementById('msgHistory');
+  const all=MESSAGES.filter(visibleToMeOrMine).slice().sort((a,b)=>parseISO(b.date)-parseISO(a.date)||b.id-a.id);
+  if(!all.length){wrap.innerHTML='<div class="empty-hint">No messages yet.</div>';return;}
+  wrap.innerHTML=all.map(m=>msgCard(m,false)).join('');
+}
+function visibleToMeOrMine(m){ return visibleToMe(m) || m.from===ROLE; }
+function updateMsgBadge(){
+  const inbox=MESSAGES.filter(m=>!m.cleared && visibleToMe(m));
+  let b=document.querySelector('.bnav .badge-dot');
+  if(inbox.length){if(!b){b=document.createElement('span');b.className='badge-dot';document.getElementById('nav-msgs').appendChild(b);}}
+  else if(b){b.remove();}
+}
+
+/* ── availability on home (all roles can edit the shared record) ── */
+function renderAvailHome(){
+  const wrap=document.getElementById('availHome');
+  const todayAvail=AVAILABILITY[parseISO(TODAY).getDay()];
+  wrap.innerHTML=`<div class="sec-h"><span>Availability</span><span class="link" onclick="openAvailability()">Set availability ›</span></div>
+    ${todayAvail&&todayAvail.trim()
+      ? `<div class="avail-hint"><span class="ah-lab">◴ ${DOW[parseISO(TODAY).getDay()]}:</span> ${escapeHTML(todayAvail)}</div>`
+      : `<div class="avail-hint" style="opacity:0.75">No availability set for today — tap “Set availability” to add recurring weekly notes.</div>`}`;
+}
+
+/* ════ CALENDAR ════ */
+function renderCal(){
+  document.getElementById('calMo').textContent=MO[calM]+' '+calY;
+  const grid=document.getElementById('calGrid');grid.innerHTML='';
+  const first=new Date(calY,calM,1).getDay(),days=new Date(calY,calM+1,0).getDate();
+  for(let i=0;i<first;i++){const c=document.createElement('div');c.className='cell empty';grid.appendChild(c);}
+  for(let d=1;d<=days;d++){
+    const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const cell=document.createElement('div');cell.className='cell';const plan=DAYS[ds];
+    const ev=eventsOn(ds);
+    if(plan){cell.classList.add('has');cell.onclick=()=>openDay(ds);
+      const tag=document.createElement('div');tag.className='tag';tag.style.background=`var(--${badgeColor((plan.badges||[])[0])})`;cell.appendChild(tag);
+      if(!plan.rest&&allDayDone(plan)){const dd=document.createElement('div');dd.className='done-dot';cell.appendChild(dd);}
+      if(anySessionSkipped(plan)){const sk=document.createElement('div');sk.className='skip-mark';sk.textContent='✕';cell.appendChild(sk);}
+      if(plan.feedback){const nm=document.createElement('div');nm.className='note-mark';nm.textContent='◆';cell.appendChild(nm);}
+    }else if(ev.length){cell.classList.add('has');cell.onclick=()=>openDay(ds);}
+    if(ev.length){const eb=document.createElement('div');eb.className='event-bar';eb.style.background=EVENT_TYPES[ev[0].type].color;cell.appendChild(eb);}
+    if(ds===TODAY)cell.classList.add('today');
+    if(ds===selDate)cell.classList.add('sel');
+    if(parseISO(ds)<parseISO(TODAY))cell.classList.add('before');
+    const num=document.createElement('span');num.textContent=d;cell.insertBefore(num,cell.firstChild);
+    grid.appendChild(cell);
+  }
+  renderWeek();
+}
+/* day summary carries a `done` map keyed `${session}__${move}`; we can't know move-count
+   without the full day, so the overview marks "done" only if the day record flags allDone.
+   We approximate: a day is "done" when it has a Done map and no sessions are skipped and
+   the full day (if cached) confirms. For the dot we use cached full day when available. */
+function allDayDone(planSummary){
+  const ds=planSummary.date;
+  const full=DAY_CACHE[ds];
+  if(full)return fullDayDone(full);
+  // fallback: any completion recorded and nothing skipped
+  const done=planSummary.done||{};const skipped=planSummary.skipped||{};
+  return Object.keys(done).length>0 && Object.keys(skipped).length===0;
+}
+function fullDayDone(full){
+  if(!full.sessions||!full.sessions.length)return false;
+  let t=0,dn=0;
+  full.sessions.forEach(s=>{ if(full.skipped[s.name])return; s.moves.forEach(m=>{t++;if(full.done[`${s.name}__${m.name}`])dn++;}); });
+  return t>0&&dn===t;
+}
+function anySessionSkipped(planSummary){return Object.keys(planSummary.skipped||{}).length>0;}
+function badgeColor(b){return b==='Charlotte'?'charlotte':b==='Cape'?'cape':b==='Sarasota'?'sarasota':b==='Sprints'?'sprint':b==='Strength'?'strength':b==='Roller'?'roller':'rest';}
+function eventsOn(ds){return EVENTS.filter(e=>{const s=parseISO(e.date),en=e.end?parseISO(e.end):s,t=parseISO(ds);return t>=s&&t<=en;});}
+
+function renderWeek(){
+  const base=parseISO(TODAY),start=new Date(base);start.setDate(base.getDate()-base.getDay());
+  const cards=document.getElementById('weekCards');cards.innerHTML='';
+  document.getElementById('weekLabel').textContent='This Week — at a glance';
+  for(let i=0;i<7;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);const ds=iso(d);const plan=DAYS[ds];
+    const card=document.createElement('div');card.className='day-card'+(ds===TODAY?' is-today':'')+(plan&&plan.rest?' rest':'');
+    if(plan){card.style.borderLeftColor=`var(--${badgeColor((plan.badges||[])[0])})`;card.onclick=()=>openDay(ds);}else{card.style.opacity='0.5';}
+    const badges=plan?(plan.badges||[]):[];
+    card.innerHTML=`<div class="dc-date"><div class="dc-dow">${DOW[d.getDay()]}</div><div class="dc-num">${d.getDate()}</div></div>
+      <div class="dc-body"><div class="dc-title">${plan?escapeHTML(plan.label||'Training'):'—'}${ds===TODAY?'<span class="today-flag">Today</span>':''}</div>
+      <div class="dc-meta">${plan?badges.map(b=>`<span class="badge ${LOC[b]||'b-rest'}">${b}</span>`).join(''):'<span class="badge ghost">No plan</span>'}
+      ${plan&&plan.feedback?'<span class="note-chip">◆ note</span>':''}</div></div>${plan?'<div class="dc-arrow">›</div>':''}`;
+    cards.appendChild(card);
+  }
+}
+function escapeHTML(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ════ DAY DETAIL ════ */
+async function openDay(ds){
+  selDate=ds;go('day');
+  const c=document.getElementById('dayContent');
+  c.innerHTML='<div class="inline-load"><div class="spinner"></div></div>';
+  // load + cache full day
+  let full=DAY_CACHE[ds];
+  if(!full){
+    try{ const r=await apiGet('plan',{action:'day',planProjectId:ATHLETE.planProjectId,date:ds}); full=r.day; DAY_CACHE[ds]=full; }
+    catch(e){ full=null; }
+  }
+  renderDay(ds,full);
+}
+function renderDay(ds,full){
+  const c=document.getElementById('dayContent');const ev=eventsOn(ds);
+  const summary=DAYS[ds];
+  const badges=full?(full.badges||[]):(summary?summary.badges||[]:[]);
+  let h=`<div class="day-hero"><div class="dh-date">${fmtDate(ds)}</div><div class="dh-badges">${badges.map(b=>`<span class="badge ${LOC[b]||'b-rest'}">${b}</span>`).join('')}</div></div>`;
+  if(ev.length){h+=ev.map(e=>`<div class="event-card" style="border-left-color:${EVENT_TYPES[e.type].color}">
+    <div class="ev-type" style="color:${EVENT_TYPES[e.type].color}">${EVENT_TYPES[e.type].label}${e.shared?' · shared':''}</div>
+    <div class="ev-title">${escapeHTML(e.title)}</div>${e.end&&e.end!==e.date?`<div class="ev-dates">${fmtDate(e.date)} – ${fmtDate(e.end)}</div>`:''}</div>`).join('');}
+  h+=feedbackBox(ds,full);
+  if(!full){
+    if(!ev.length)h+=`<div class="rest-card"><div class="icon">○</div><h3>No plan yet</h3><p>${canBuild()?'Use Build to add training for this day.':'Nothing scheduled.'}</p></div>`;
+  }else if(full.rest){
+    h+=`<div class="rest-card"><div class="icon">◍</div><h3>${escapeHTML(full.label||'Rest')}</h3><p>${escapeHTML(full.note||'')}</p></div>`;
+  }else{
+    (full.sessions||[]).forEach(s=>{
+      const sSkipped=!!full.skipped[s.name];
+      h+=`<div class="session${sSkipped?' session-skipped':''}"><div class="session-head"><div class="sh-l"><span class="sh-tag">${s.tag||''}</span><span class="sh-name">${escapeHTML(s.name)}</span></div>
+        ${sSkipped?'<span class="sh-skip">✕ not completed</span>':''}</div><div class="session-body">`;
+      if(sSkipped){h+=`<div class="skip-banner"><div class="sk-reason">"${escapeHTML(full.skipped[s.name].reason)}"</div></div>
+        <button class="skip-btn undo" onclick="unskipSession('${ds}','${esc(s.name)}')">↺ Undo — mark session available</button></div></div>`;return;}
+      s.moves.forEach(m=>{
+        const key=`${s.name}__${m.name}`,done=!!full.done[key],strength=isStrengthCat(m);
+        const prescribed=hasPrescribed(m);
+        h+=`<div class="move${done?' done':''}${strength?'':' skill'}"><div class="move-top"><div class="move-name">${escapeHTML(m.name)}<span class="move-type-tag ${strength?'tt-strength':'tt-skill'}">${m.cat||'—'}</span></div></div>
+          <div class="move-spec">${Object.entries(m.spec||{}).map(([k,v])=>`<div class="row"><b>${escapeHTML(k)}:</b> ${escapeHTML(v)}</div>`).join('')||'<div class="row" style="color:var(--ink-light)">No specifics — log how it went</div>'}</div>`;
+        if(strength&&prescribed){const logged=LOG.some(e=>e.exercise===m.name&&!e.skillNote),carry=CARRY[m.name]||{last:null,pr:null};
+          if(logged&&(carry.last||carry.pr))h+=`<div class="carry"><div class="chip"><div class="lab">Last session</div><div class="val">${carry.last||'—'}</div></div><div class="chip pr"><div class="lab">★ Personal best</div><div class="val">${carry.pr||'—'}</div></div></div>`;
+          else h+=`<div class="carry"><div class="chip none"><div class="lab">History</div><div class="val">No prior log — set the baseline</div></div></div>`;
+        }else{const last=LOG.filter(e=>e.exercise===m.name&&e.skillNote).sort((a,b)=>parseISO(b.date)-parseISO(a.date))[0];if(last)h+=`<div class="skill-note-show"><b>Last time:</b> ${escapeHTML(last.skillNote)}</div>`;}
+        h+=`<div class="move-actions">`;
+        if(m.video)h+=`<button class="btn video" onclick="watchVideo('${esc(m.video)}')">▶ Watch</button>`;
+        if(strength&&prescribed)h+=`<button class="btn log" onclick="openLog('${esc(m.name)}','${esc(s.name)}','${ds}','strength')">＋ Log</button>`;
+        else h+=`<button class="btn notes" onclick="openLog('${esc(m.name)}','${esc(s.name)}','${ds}','skill')">✎ Notes</button>`;
+        h+=`<button class="btn check ${done?'on':''}" onclick="toggleDone('${ds}','${esc(key)}',${done?1:0})">${done?'✓ Done':'Mark done'}</button></div></div>`;
+      });
+      h+=`<button class="skip-btn small" onclick="openSkip('${ds}','${esc(s.name)}')">✕ Couldn't complete ${s.tag||''} session</button>`;
+      h+=`</div></div>`;
+    });
+  }
+  c.innerHTML=h;
+}
+function hasPrescribed(m){return Object.values(m.spec||{}).some(v=>/\d/.test(String(v)));}
+
+async function toggleDone(ds,key,wasDone){
+  const full=DAY_CACHE[ds];if(!full)return;
+  const now=!wasDone;
+  if(now)full.done[key]=true;else delete full.done[key];
+  if(DAYS[ds]){DAYS[ds].done=full.done;}
+  renderDay(ds,full);
+  try{ await apiPost('plan',{action:'toggle_done',planProjectId:ATHLETE.planProjectId,date:ds,key,done:now}); }
+  catch(e){ toast('Sync failed — try again'); }
+}
+
+/* ── skip a session ── */
+let skipCtx={},skipReason='Rain / weather';
+function openSkip(ds,sessionName){
+  skipCtx={ds,sessionName};skipReason='Rain / weather';
+  let inner=`<div class="modal-grab"></div><h3>Not completed</h3><div class="sub">${escapeHTML(sessionName)} · ${fmtDate(ds)} — let coach know why</div>
+    <div class="mv-toggle-row" id="skipReasons">
+      ${['Rain / weather','Sick','Track closed','Travel','Other'].map((r,i)=>`<div class="mvt ${i===0?'on':''}" onclick="pickSkipReason(this,'${r}')">${r}</div>`).join('')}
+    </div>
+    <textarea class="note-in big" id="skipNote" placeholder="Optional detail…"></textarea>
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn save" onclick="saveSkip()">Mark not completed</button></div>`;
+  document.getElementById('modalInner').innerHTML=inner;
+  document.getElementById('modalBg').classList.add('show');
+}
+function pickSkipReason(el,r){skipReason=r;[...document.getElementById('skipReasons').children].forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+async function saveSkip(){
+  const note=document.getElementById('skipNote').value.trim();
+  const skip={reason:skipReason+(note?' — '+note:''),by:ROLE};
+  closeModal();
+  const ds=skipCtx.ds;const full=DAY_CACHE[ds];
+  if(full){full.skipped[skipCtx.sessionName]=skip;if(DAYS[ds])DAYS[ds].skipped=full.skipped;renderDay(ds,full);}
+  toast('Session marked not completed');
+  try{ await apiPost('plan',{action:'skip',planProjectId:ATHLETE.planProjectId,date:ds,sessionName:skipCtx.sessionName,skip}); }catch(e){toast('Sync failed');}
+}
+async function unskipSession(ds,sessionName){
+  const full=DAY_CACHE[ds];if(full){delete full.skipped[sessionName];if(DAYS[ds])DAYS[ds].skipped=full.skipped;renderDay(ds,full);}
+  toast('Cleared');
+  try{ await apiPost('plan',{action:'skip',planProjectId:ATHLETE.planProjectId,date:ds,sessionName,skip:null}); }catch(e){toast('Sync failed');}
+}
+
+/* ── coach feedback per day ── */
+function feedbackBox(ds,full){
+  const note=(full&&full.feedback)||'';
+  if(canBuild())return `<div class="fb-box"><div class="fb-lab">◆ Coach note for this day</div><textarea id="fbInput" placeholder="Leave feedback for this day…">${escapeHTML(note)}</textarea><button class="fb-save" onclick="saveFeedback('${ds}')">Save note</button></div>`;
+  if(!note)return '';return `<div class="fb-box"><div class="fb-lab">◆ Note from Coach</div><div class="fb-text">${escapeHTML(note)}</div></div>`;
+}
+async function saveFeedback(ds){
+  const v=document.getElementById('fbInput').value.trim();
+  const full=DAY_CACHE[ds];if(full)full.feedback=v;if(DAYS[ds])DAYS[ds].feedback=v;
+  toast('Note saved');
+  try{ await apiPost('plan',{action:'set_feedback',planProjectId:ATHLETE.planProjectId,date:ds,feedback:v}); }
+  catch(e){ toast(e.message.indexOf('save a plan')>-1?'Add a plan for this day first':'Sync failed'); }
+}
+function watchVideo(url){ window.open(url,'_blank','noopener'); }
+function esc(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+
+/* ════ LOG MODAL ════ */
+let logCtx={};
+function openLog(move,session,date,mode){
+  logCtx={move,session,date,mode};
+  // find category from the move in the cached day (for the log record)
+  let cat='';const full=DAY_CACHE[date];
+  if(full){(full.sessions||[]).forEach(s=>s.moves.forEach(m=>{if(m.name===move)cat=m.cat||'';}));}
+  logCtx.cat=cat;
+  let inner=`<div class="modal-grab"></div><h3>${escapeHTML(move)}</h3><div class="sub">${escapeHTML(session)} · ${fmtDate(date)}</div>`;
+  if(mode==='skill'){
+    inner+=`<textarea class="note-in big" id="mNote" placeholder="How did it go? Reaction, sharpness, anything to flag…"></textarea>`;
+  }else{
+    inner+=`<div class="field-labels"><span>Set</span><span>Weight</span><span>Reps</span><span></span></div><div id="setRows"></div><button class="add-set" onclick="addSet()">+ Add set</button>
+    <textarea class="note-in" id="mNote" placeholder="Notes (optional) — how did it feel?"></textarea>`;
+  }
+  inner+=`<div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn save" onclick="saveLog()">Save</button></div>`;
+  document.getElementById('modalInner').innerHTML=inner;
+  if(mode==='strength'){const hist=LOG.filter(e=>e.exercise===move&&!e.skillNote).sort((a,b)=>parseISO(b.date)-parseISO(a.date));if(hist.length&&hist[0].sets.length&&!hist[0].best)hist[0].sets.forEach(s=>addSet(s.w,s.r));else{addSet();addSet();addSet();}}
+  document.getElementById('modalBg').classList.add('show');
+}
+function addSet(w='',r=''){const rows=document.getElementById('setRows');const n=rows.children.length+1;const div=document.createElement('div');div.className='set-row';div.innerHTML=`<div class="sn">${n}</div><input type="text" inputmode="decimal" placeholder="lb/in/BW" value="${String(w).replace(/"/g,'&quot;')}"><input type="number" inputmode="numeric" placeholder="reps" value="${r}"><button class="rm" onclick="this.parentElement.remove();renumber()">×</button>`;rows.appendChild(div);}
+function renumber(){[...document.getElementById('setRows').children].forEach((r,i)=>r.querySelector('.sn').textContent=i+1);}
+function closeModal(){document.getElementById('modalBg').classList.remove('show');}
+async function saveLog(){
+  let entry;
+  if(logCtx.mode==='skill'){
+    const note=document.getElementById('mNote').value.trim();if(!note){toast('Add a note first');return;}
+    entry={exercise:logCtx.move,date:TODAY,cat:logCtx.cat,sets:[],skillNote:note,note:'',by:ROLE};
+  }else{
+    const rows=[...document.getElementById('setRows').children];
+    const sets=rows.map(r=>{const ins=r.querySelectorAll('input');return{w:ins[0].value.trim(),r:parseInt(ins[1].value)||0};}).filter(s=>s.w!==''||s.r);
+    if(!sets.length){toast('Add at least one set');return;}
+    entry={exercise:logCtx.move,date:TODAY,cat:logCtx.cat||'Strength',sets,note:document.getElementById('mNote').value.trim(),by:ROLE};
+  }
+  closeModal();toast('Saving…');
+  try{
+    await apiPost('log',{action:'add_entry',logProjectId:ATHLETE.logProjectId,entry});
+    // refresh log + carry so charts and carry-over update
+    const r=await apiGet('log',{action:'log',logProjectId:ATHLETE.logProjectId});LOG=r.entries||[];CARRY=r.carry||{};
+    toast('Saved — '+entry.exercise);
+    if(DAY_CACHE[logCtx.date])renderDay(logCtx.date,DAY_CACHE[logCtx.date]);
+  }catch(e){ toast('Save failed — try again'); }
+}
+
+/* ════ PROGRESS ════ */
+let progChart=null,progSel=null;
+function trackedMoveNames(){
+  // all strength moves that appear anywhere in the plan OR have log history
+  const names={};
+  Object.values(DAY_CACHE).forEach(full=>{ if(full&&full.sessions)full.sessions.forEach(s=>s.moves.forEach(m=>{if(isStrengthCat(m))names[m.name]=true;})); });
+  LOG.forEach(e=>{ if(!e.skillNote && (e.cat==='Strength'||CARRY[e.exercise]))names[e.exercise]=true; });
+  return Object.keys(names);
+}
+/* chart visibility: a move shows on charts unless TOGGLES[name]===false.
+   Coach controls these; default visible. */
+function chartVisible(name){ return TOGGLES[name]!==false; }
+function renderProg(){
+  const dd=document.getElementById('trackDropdown');
+  let ddHtml=`<div class="track-note">Progress charts cover <b>Strength</b> moves. Sprints, roller, and track work are logged as notes on each day.</div>`;
+  if(canBuild())ddHtml+=renderToggleDropdown();
+  dd.innerHTML=ddHtml;
+  if(canBuild())wireToggleDropdown();
+
+  // moves with strength log history, filtered by visibility
+  const logged=[...new Set(LOG.filter(e=>!e.skillNote&&(e.cat==='Strength'||true)).map(e=>e.exercise))]
+    .filter(name=>CARRY[name]) // has comparable history
+    .filter(chartVisible);
+  if(!logged.includes(progSel))progSel=logged[0]||null;
+  const pick=document.getElementById('progPick');pick.innerHTML='';
+  logged.forEach(m=>{const b=document.createElement('button');b.textContent=m;if(m===progSel)b.classList.add('on');b.onclick=()=>{progSel=m;renderProg();};pick.appendChild(b);});
+  if(!progSel){document.getElementById('progStats').innerHTML='';document.getElementById('chartTitle').textContent='No strength logs yet';document.getElementById('histList').innerHTML='<div class="empty-hint">Log a strength move to see progress here.</div>';if(progChart){progChart.destroy();progChart=null;}return;}
+  const hist=LOG.filter(e=>e.exercise===progSel&&!e.skillNote).sort((a,b)=>parseISO(a.date)-parseISO(b.date));const carry=CARRY[progSel]||{last:null,pr:null};
+  document.getElementById('progStats').innerHTML=`<div class="stat"><div class="v">${hist.length}</div><div class="l">Sessions</div></div><div class="stat last"><div class="v" style="font-size:21px">${carry.last||'—'}</div><div class="l">Last</div></div><div class="stat pr"><div class="v" style="font-size:21px">${carry.pr||'—'}</div><div class="l">Best</div></div>`;
+  document.getElementById('chartTitle').textContent=progSel;
+  const labels=hist.map(e=>{const d=parseISO(e.date);return MO[d.getMonth()].slice(0,3)+' '+d.getDate();}),data=hist.map(topLoadClient);
+  if(progChart)progChart.destroy();
+  progChart=new Chart(document.getElementById('progChart'),{type:'line',data:{labels,datasets:[{data,borderColor:'#E23030',backgroundColor:'rgba(226,48,48,0.08)',borderWidth:3,fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#E23030',pointBorderColor:'#fff',pointBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,grid:{color:'rgba(20,24,30,0.06)'},ticks:{font:{family:'Raleway',weight:'600'}}},x:{grid:{display:false},ticks:{font:{family:'Raleway',weight:'600'}}}}}});
+  document.getElementById('histList').innerHTML=hist.slice().reverse().map(e=>`<div class="hist-row"><div class="hd">${fmtDate(e.date)}${e.note?'<small>'+escapeHTML(e.note)+'</small>':''}</div><div class="hv">${summarizeClient(e)}</div></div>`).join('');
+}
+function topLoadClient(e){let n=(e.sets||[]).map(s=>parseFloat(String(s.w))).filter(x=>!isNaN(x));if(n.length)return Math.max(...n);if(e.best)return e.best;let r=(e.sets||[]).map(s=>s.r).filter(x=>typeof x==='number'&&x>0);return r.length?Math.max(...r):null;}
+function summarizeClient(e){if(e.best)return e.best+' in';const t=(e.sets||[]).filter(s=>s.w!==''&&s.w!=null);if(!t.length)return (e.sets||[]).map(s=>s.r).join(', ')+' reps';let b=t[0],bn=-Infinity;t.forEach(s=>{const n=parseFloat(String(s.w));if(!isNaN(n)&&n>bn){bn=n;b=s;}});if(isNaN(parseFloat(String(b.w))))return b.w+' × '+b.r;return b.w+' lb × '+b.r;}
+
+/* coach-only chart-visibility toggles (a dropdown of strength moves) */
+function renderToggleDropdown(){
+  const names=trackedMoveNames().sort();
+  if(!names.length)return '';
+  return `<div class="dropdown" id="toggleDD">
+    <div class="dd-head" onclick="document.getElementById('toggleDD').classList.toggle('open')">Chart visibility <span class="chev">▾</span></div>
+    <div class="dd-body">
+      <div class="toggle-note">Turn a move off to hide its chart from the athlete. This is separate from category — it only controls what shows on the Progress charts.</div>
+      ${names.map(n=>`<div class="track-row"><div><div class="tr-name">${escapeHTML(n)}</div><div class="tr-sub">${chartVisible(n)?'Shown on charts':'Hidden'}</div></div><div class="sw ${chartVisible(n)?'on':''}" data-move="${escapeHTML(n)}"></div></div>`).join('')}
+    </div></div>`;
+}
+function wireToggleDropdown(){
+  [...document.querySelectorAll('#toggleDD .sw')].forEach(sw=>{
+    sw.onclick=async()=>{
+      const name=sw.dataset.move;
+      const nowOn=!sw.classList.contains('on');
+      TOGGLES[name]=nowOn; // store explicit value (true shown, false hidden)
+      if(nowOn)delete TOGGLES[name]; // default visible — keep map small
+      else TOGGLES[name]=false;
+      renderProg();
+      try{ await apiPost('log',{action:'save_toggles',metaProjectId:ATHLETE.metaProjectId,toggles:TOGGLES}); }catch(e){toast('Sync failed');}
+    };
+  });
+}
+
+/* ════ COACH NOTES (coach-only, per athlete) ════ */
+function renderNotes(){
+  const c=document.getElementById('notesContent');
+  if(!canBuild()){c.innerHTML='<div class="empty-hint">Coach notes are private to the coach.</div>';return;}
+  const n=COACH_NOTES;
+  c.innerHTML=`
+    <div class="coach-only-banner">◆ Coach-eyes-only · ${escapeHTML(ATHLETE.name)}</div>
+    <div class="cn-block"><div class="cn-lab"><span class="pin" style="background:var(--blue)"></span>Goals</div>
+      <textarea id="cnGoals" placeholder="Season goals, targets, what success looks like…">${escapeHTML(n.goals)}</textarea>
+      <button class="cn-save" onclick="saveSnapshot()">Save snapshots</button></div>
+    <div class="cn-block"><div class="cn-lab"><span class="pin" style="background:var(--green)"></span>Strengths</div>
+      <textarea id="cnStrengths" placeholder="What this athlete does well…">${escapeHTML(n.strengths)}</textarea></div>
+    <div class="cn-block"><div class="cn-lab"><span class="pin" style="background:var(--red)"></span>Weaknesses / focus areas</div>
+      <textarea id="cnWeak" placeholder="What to work on…">${escapeHTML(n.weaknesses)}</textarea></div>
+    <div class="sec-h" style="margin-top:18px">Quick notes</div>
+    <div class="cn-quick">
+      <div class="cq-add"><textarea id="cnQuick" placeholder="Jot a timestamped note…"></textarea><button onclick="addQuickNote()">Add</button></div>
+      <div id="cnQuickList">${renderQuickList()}</div>
+    </div>`;
+}
+function renderQuickList(){
+  const q=COACH_NOTES.quick||[];
+  if(!q.length)return '<div class="empty-hint">No quick notes yet.</div>';
+  return q.slice().sort((a,b)=>(b.ts||0)-(a.ts||0)).map(e=>`<div class="cq-entry"><div class="cq-time">${fmtTimestamp(e.ts)}</div><div class="cq-text">${escapeHTML(e.text)}</div></div>`).join('');
+}
+function fmtTimestamp(ts){const d=new Date(ts||Date.now());return DOW[d.getDay()]+' '+MO[d.getMonth()].slice(0,3)+' '+d.getDate()+', '+d.getFullYear()+' · '+d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});}
+async function saveSnapshot(){
+  COACH_NOTES.goals=document.getElementById('cnGoals').value.trim();
+  COACH_NOTES.strengths=document.getElementById('cnStrengths').value.trim();
+  COACH_NOTES.weaknesses=document.getElementById('cnWeak').value.trim();
+  toast('Saved');
+  try{ await persistCoachNotes(); }catch(e){toast('Sync failed');}
+}
+async function addQuickNote(){
+  const t=document.getElementById('cnQuick').value.trim();if(!t){toast('Write a note first');return;}
+  COACH_NOTES.quick=COACH_NOTES.quick||[];
+  COACH_NOTES.quick.push({ts:Date.now(),text:t});
+  document.getElementById('cnQuick').value='';
+  document.getElementById('cnQuickList').innerHTML=renderQuickList();
+  toast('Note added');
+  try{ await persistCoachNotes(); }catch(e){toast('Sync failed');}
+}
+function persistCoachNotes(){ return apiPost('log',{action:'save_coach_notes',metaProjectId:ATHLETE.metaProjectId,notes:COACH_NOTES}); }
+
+/* ════ AVAILABILITY (shared; all roles can edit) ════ */
+function openAvailability(){
+  const days=[1,2,3,4,5,6,0];
+  let inner=`<div class="modal-grab"></div><h3>Weekly availability</h3><div class="sub">Recurring notes per weekday — shared with coach, shows in the builder</div>
+    ${days.map(d=>`<div class="avail-edit"><label>${['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d]}</label>
+      <input class="avail-in" data-day="${d}" value="${(AVAILABILITY[d]||'').replace(/"/g,'&quot;')}" placeholder="e.g. Trains at Charlotte / rest / busy after school"></div>`).join('')}
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn save" onclick="saveAvailability()">Save</button></div>`;
+  document.getElementById('modalInner').innerHTML=inner;
+  document.getElementById('modalBg').classList.add('show');
+}
+async function saveAvailability(){
+  [...document.querySelectorAll('.avail-in')].forEach(i=>{AVAILABILITY[+i.dataset.day]=i.value.trim();});
+  closeModal();toast('Availability saved');
+  renderAvailHome();
+  if(document.getElementById('view-build').classList.contains('active'))renderBuildCanvas();
+  try{ await apiPost('plan',{action:'save_availability',metaProjectId:ATHLETE.metaProjectId,availability:AVAILABILITY}); }catch(e){toast('Sync failed');}
+}
+
+/* ════ NAV + INIT ════ */
+function go(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  ['cal','prog','build','notes','msgs'].forEach(n=>{const el=document.getElementById('nav-'+n);if(el)el.classList.remove('on');});
+  const navId=(v==='day'?'cal':v);const navEl=document.getElementById('nav-'+navId);if(navEl)navEl.classList.add('on');
+  if(v==='cal')renderHome();
+  if(v==='prog')renderProg();
+  if(v==='build')renderBuild();
+  if(v==='notes')renderNotes();
+  if(v==='msgs')renderMsgHistory();
+  updateMsgBadge();
+  window.scrollTo(0,0);
+}
+function calShift(n){calM+=n;if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;}renderCal();}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg')closeModal();});
+document.getElementById('liPin').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+/* boot */
+tryRestoreSession();
+
+/* ════ BUILDER (coach only) ════ */
+let buildSel=null, buildWeekStart=null, DRAFT={};
+function mondayOf(ds){const d=parseISO(ds);const m=new Date(d);m.setDate(d.getDate()-((d.getDay()+6)%7));return iso(m);}
+
+async function renderBuild(){
+  // latest athlete/parent note becomes a build hint
+  const note=MESSAGES.filter(m=>m.from!=='coach').sort((a,b)=>parseISO(b.date)-parseISO(a.date)||b.id-a.id)[0];
+  document.getElementById('builderNote').innerHTML=note?`<div class="builder-note"><div class="bn-lab">◆ From ${whoLabel(note).replace('From ','')} — build around this</div><div class="bn-text">${escapeHTML(note.text)}</div></div>`:'';
+  if(!buildSel)buildSel=TODAY;
+  if(!buildWeekStart)buildWeekStart=mondayOf(TODAY);
+  const ws=parseISO(buildWeekStart),we=new Date(ws);we.setDate(ws.getDate()+6);
+  document.getElementById('buildNav').innerHTML=`<div class="build-weeknav">
+    <button onclick="buildWeekShift(-1)">‹</button>
+    <div class="bw-label">${MO[ws.getMonth()].slice(0,3)} ${ws.getDate()} – ${MO[we.getMonth()].slice(0,3)} ${we.getDate()}</div>
+    <button onclick="buildWeekShift(1)">›</button>
+  </div>
+  <div class="build-jump"><button onclick="buildJumpToday()">Today</button><button onclick="openEventEditor(buildSel)">＋ Add event / race</button><button onclick="openAvailability()">◴ Availability</button></div>`;
+  const wrap=document.getElementById('buildDays');wrap.innerHTML='';
+  for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(ws.getDate()+i);const ds=iso(d);const plan=DAYS[ds];const ev=eventsOn(ds);
+    const el=document.createElement('div');el.className='build-day'+(ds===buildSel?' sel':'')+(ds===TODAY?' today':'');el.onclick=()=>{buildSel=ds;renderBuild();};
+    el.innerHTML=`<div class="bd-dow">${DOW[d.getDay()]}</div><div class="bd-num">${d.getDate()}</div>`;
+    if(plan){const dot=document.createElement('div');dot.className='bd-dot';dot.style.background=`var(--${badgeColor((plan.badges||[])[0])})`;el.appendChild(dot);}
+    if(ev.length){const eb=document.createElement('div');eb.className='bd-event';eb.style.background=EVENT_TYPES[ev[0].type].color;el.appendChild(eb);}
+    wrap.appendChild(el);
+  }
+  await renderBuildCanvas();
+}
+function buildWeekShift(n){const d=parseISO(buildWeekStart);d.setDate(d.getDate()+n*7);buildWeekStart=iso(d);renderBuild();}
+function buildJumpToday(){buildWeekStart=mondayOf(TODAY);buildSel=TODAY;renderBuild();}
+
+/* ensure a draft exists for the selected day, hydrating from the server's full day */
+async function ensureDraft(ds){
+  if(DRAFT[ds])return DRAFT[ds];
+  let full=DAY_CACHE[ds];
+  if(full===undefined && DAYS[ds]){ // there's a plan but we haven't loaded sessions
+    try{ const r=await apiGet('plan',{action:'day',planProjectId:ATHLETE.planProjectId,date:ds}); full=r.day; DAY_CACHE[ds]=full; }catch(e){ full=null; }
+  }
+  if(full){
+    DRAFT[ds]=JSON.parse(JSON.stringify({label:full.label,badges:full.badges,rest:full.rest,note:full.note,sessions:full.sessions||[]}));
+  }else{
+    DRAFT[ds]={label:'',badges:[],rest:false,sessions:[],note:''};
+  }
+  return DRAFT[ds];
+}
+async function renderBuildCanvas(){
+  const ds=buildSel;const c=document.getElementById('buildCanvas');
+  c.innerHTML='<div class="inline-load"><div class="spinner"></div></div>';
+  const draft=await ensureDraft(ds);const ev=eventsOn(ds);
+  let h=`<div style="font-family:'Barlow Condensed';font-weight:800;font-size:22px;text-transform:uppercase;margin-bottom:12px">${fmtDate(ds)}</div>`;
+  const avail=AVAILABILITY[parseISO(ds).getDay()];
+  if(avail&&avail.trim())h+=`<div class="avail-hint"><span class="ah-lab">◴ ${DOW[parseISO(ds).getDay()]} availability:</span> ${escapeHTML(avail)}</div>`;
+  if(ev.length)h+=ev.map(e=>`<div class="bc-event" style="border-left-color:${EVENT_TYPES[e.type].color}"><div><span class="bc-ev-type" style="color:${EVENT_TYPES[e.type].color}">${EVENT_TYPES[e.type].label}</span> ${escapeHTML(e.title)}${e.shared?' <span class="bc-shared">shared</span>':''}</div><button class="bc-del" onclick="delEvent(${e.id})">×</button></div>`).join('');
+  h+=`<div class="bc-rest-toggle"><div class="rt-name">Rest day</div><div class="sw ${draft.rest?'on':''}" onclick="toggleRest('${ds}')"></div></div>`;
+  if(!draft.rest){
+    (draft.sessions||[]).forEach((s,si)=>{
+      h+=`<div class="bc-session"><div class="bc-session-head">
+        <input value="${(s.name||'').replace(/"/g,'&quot;')}" placeholder="Session name" onchange="setSessName('${ds}',${si},this.value)">
+        <div class="seg">${['AM','PM','—'].map(t=>`<button class="${s.tag===t?'on':''}" onclick="setSessTag('${ds}',${si},'${t}')">${t}</button>`).join('')}<button class="bc-del" onclick="delSession('${ds}',${si})">🗑</button></div>
+      </div><div class="bc-moves">`;
+      (s.moves||[]).forEach((m,mi)=>{
+        h+=`<div class="bc-move"><div class="bm-top"><div class="bm-name" onclick="editMove('${ds}',${si},${mi})">${escapeHTML(m.name)} <span class="bm-edit-hint">edit</span></div><div><button class="bc-swap" onclick="swapMove('${ds}',${si},${mi})">swap</button><button class="bc-del" onclick="delMove('${ds}',${si},${mi})">×</button></div></div>
+          <div class="bm-pills"><span class="bm-pill">${m.cat||'—'}</span>${isStrengthCat(m)?'<span class="bm-pill">tracked</span>':''}${m.video?'<span class="bm-pill">▶ video</span>':''}</div>
+          <div class="bm-spec" onclick="editMove('${ds}',${si},${mi})">${Object.entries(m.spec||{}).map(([k,v])=>k+': '+v).join(' · ')||'Tap to add details'}</div>`;
+        // deliverable #4: show last + PR for each Strength move, read from the Log
+        if(isStrengthCat(m)){const carry=CARRY[m.name];
+          if(carry&&(carry.last||carry.pr))h+=`<div class="carry"><div class="chip"><div class="lab">Last</div><div class="val">${carry.last||'—'}</div></div><div class="chip pr"><div class="lab">★ Best</div><div class="val">${carry.pr||'—'}</div></div></div>`;
+          else h+=`<div class="carry"><div class="chip none"><div class="lab">History</div><div class="val">No prior log yet</div></div></div>`;
+        }
+        h+=`</div>`;
+      });
+      h+=`<button class="bc-add" onclick="openLibrary('${ds}',${si})">＋ Add move</button></div></div>`;
+    });
+    h+=`<div class="bc-add-row"><button class="bc-add session" onclick="addSession('${ds}')">＋ Blank session</button><button class="bc-add tmpl" onclick="openTemplates('${ds}')">▤ From template</button></div>`;
+  }
+  h+=`<button class="bc-save-day" onclick="saveDay('${ds}')">Save day to plan</button>`;
+  c.innerHTML=h;
+}
+
+/* templates */
+function openTemplates(ds){
+  if(!TEMPLATES.length){toast('No templates yet — build a day and save it as one later');}
+  let inner=`<div class="modal-grab"></div><h3>Add from template</h3><div class="sub">Drops in all moves — edit or swap after</div>
+    ${TEMPLATES.map(t=>`<div class="lib-item" onclick="applyTemplate('${ds}','${esc(t.name)}')"><div><div class="li-name">${escapeHTML(t.name)}</div><div class="li-sub">${t.tag||''} · ${(t.moves||[]).length} moves</div></div><span class="li-type tt-strength">${t.tag||''}</span></div>`).join('')||'<div class="empty-hint">No templates saved.</div>'}`;
+  document.getElementById('modalInner').innerHTML=inner;
+  document.getElementById('modalBg').classList.add('show');
+}
+function applyTemplate(ds,name){
+  const t=TEMPLATES.find(x=>x.name===name);if(!t)return;
+  DRAFT[ds].sessions=DRAFT[ds].sessions||[];
+  DRAFT[ds].sessions.push({tag:t.tag||'AM',name:t.name,moves:(t.moves||[]).map(mn=>libClone(mn)).filter(Boolean)});
+  closeModal();toast('Added template — '+name);renderBuildCanvas();
+}
+function libClone(name){const l=LIBRARY.find(x=>x.name===name);return l?JSON.parse(JSON.stringify(l)):null;}
+
+/* swap / edit moves */
+let swapCtx={},editCtx={};
+function swapMove(ds,si,mi){swapCtx={ds,si,mi};openLibrary(ds,si,true);}
+function editMove(ds,si,mi){
+  editCtx={ds,si,mi};
+  const m=DRAFT[ds].sessions[si].moves[mi];
+  const specRows=Object.entries(m.spec||{});
+  let inner=`<div class="modal-grab"></div><h3>${escapeHTML(m.name)}</h3><div class="sub">${m.cat||''} — edit details for ${fmtDate(ds)}</div>
+    <div id="specEditRows">${specRows.map((e,i)=>specEditRow(e[0],e[1],i)).join('')}</div>
+    <button class="add-set" onclick="addSpecRow()">+ Add detail line</button>
+    <div class="mv-edit-field" style="margin-top:14px"><label>Video link (optional)</label><input id="emVideo" value="${(m.video||'').replace(/"/g,'&quot;')}" placeholder="https://…"></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn save" onclick="saveMoveEdit()">Save</button></div>`;
+  document.getElementById('modalInner').innerHTML=inner;
+  document.getElementById('modalBg').classList.add('show');
+}
+function specEditRow(k,v,i){return `<div class="spec-edit-row"><input class="se-key" value="${(k||'').replace(/"/g,'&quot;')}" placeholder="Label (e.g. Sets)"><input class="se-val" value="${(v||'').replace(/"/g,'&quot;')}" placeholder="Value (e.g. 3 × 5)"><button class="rm" onclick="this.parentElement.remove()">×</button></div>`;}
+function addSpecRow(){const wrap=document.getElementById('specEditRows');const div=document.createElement('div');div.innerHTML=specEditRow('','',0);wrap.appendChild(div.firstChild);}
+function saveMoveEdit(){
+  const m=DRAFT[editCtx.ds].sessions[editCtx.si].moves[editCtx.mi];
+  const rows=[...document.querySelectorAll('#specEditRows .spec-edit-row')];
+  const spec={};rows.forEach(r=>{const k=r.querySelector('.se-key').value.trim();const v=r.querySelector('.se-val').value.trim();if(k)spec[k]=v;});
+  m.spec=spec;m.video=document.getElementById('emVideo').value.trim()||null;
+  closeModal();toast('Move updated');renderBuildCanvas();
+}
+
+/* library picker */
+let libCtx={},libCat='All';
+function openLibrary(ds,si,isSwap){
+  libCtx={ds,si,isSwap:!!isSwap};libCat='All';
+  let inner=`<div class="modal-grab"></div><h3>${isSwap?'Swap move':'Add a move'}</h3><div class="sub">Pick from your library — defaults fill in automatically</div>
+    <input class="lib-search" id="libSearch" placeholder="Search exercises…" oninput="filterLib()">
+    <div class="cat-tabs" id="catTabs"></div>
+    <div id="libList"></div>
+    <button class="lib-new" onclick="newExercise()">＋ New exercise (add to library)</button>`;
+  document.getElementById('modalInner').innerHTML=inner;
+  renderCatTabs();filterLib();
+  document.getElementById('modalBg').classList.add('show');
+}
+function renderCatTabs(){
+  const tabs=['All',...CATEGORIES];
+  document.getElementById('catTabs').innerHTML=tabs.map(c=>`<button class="${c===libCat?'on':''}" onclick="libCat='${c}';renderCatTabs();filterLib()">${c}</button>`).join('');
+}
+function filterLib(){
+  const q=(document.getElementById('libSearch').value||'').toLowerCase();
+  const list=document.getElementById('libList');
+  let items=LIBRARY.filter(l=>l.name.toLowerCase().includes(q));
+  if(libCat!=='All')items=items.filter(l=>l.cat===libCat);
+  let html='';
+  CATEGORIES.forEach(cat=>{
+    const inCat=items.filter(l=>l.cat===cat);
+    if(!inCat.length)return;
+    if(libCat==='All')html+=`<div class="lib-cat-h">${cat}</div>`;
+    html+=inCat.map(l=>`<div class="lib-item" onclick="pickLib('${esc(l.name)}')"><div><div class="li-name">${escapeHTML(l.name)}</div><div class="li-sub">${Object.values(l.spec||{}).slice(0,2).join(' · ')||l.type||''}</div></div><span class="li-type ${l.type==='skill'?'tt-skill':'tt-strength'}">${l.type||''}</span></div>`).join('');
+  });
+  list.innerHTML=html||'<div class="empty-hint">No match — add it as new below.</div>';
+}
+function pickLib(name){
+  const tpl=libClone(name);if(!tpl)return;
+  if(libCtx.isSwap&&swapCtx.ds!=null){DRAFT[swapCtx.ds].sessions[swapCtx.si].moves[swapCtx.mi]=tpl;swapCtx={};}
+  else DRAFT[libCtx.ds].sessions[libCtx.si].moves.push(tpl);
+  closeModal();toast((libCtx.isSwap?'Swapped to ':'Added — ')+name);renderBuildCanvas();
+}
+let neCat='Strength';
+function newExercise(){
+  let inner=`<div class="modal-grab"></div><h3>New exercise</h3><div class="sub">Adds to your library. Category sets how it logs — Strength tracks reps/weight, others are notes.</div>
+    <div class="mv-edit-field"><label>Name</label><input id="neName" placeholder="e.g. Hang Clean"></div>
+    <div class="mv-edit-field"><label>Category</label></div>
+    <div class="mv-toggle-row" id="neCatRow">${CATEGORIES.map((c,i)=>`<div class="mvt ${i===0?'on':''}" onclick="neCatPick(this,'${c}')">${c}</div>`).join('')}</div>
+    <div class="mv-edit-field"><label>Sets / reps (optional)</label><input id="neSets" placeholder="e.g. 3 × 5"></div>
+    <div class="mv-edit-field"><label>Video link (optional)</label><input id="neVideo" placeholder="https://…"></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn save" onclick="saveNewExercise()">Add</button></div>`;
+  document.getElementById('modalInner').innerHTML=inner;neCat='Strength';
+}
+function neCatPick(el,c){neCat=c;[...document.getElementById('neCatRow').children].forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+async function saveNewExercise(){
+  const name=document.getElementById('neName').value.trim();if(!name){toast('Name it first');return;}
+  const sets=document.getElementById('neSets').value.trim();const video=document.getElementById('neVideo').value.trim()||null;
+  const spec={};if(sets)spec.Sets=sets;
+  const ex={name,cat:neCat,type:neCat==='Strength'?'strength':'skill',track:neCat==='Strength',video,spec};
+  LIBRARY.push(ex);
+  DRAFT[libCtx.ds].sessions[libCtx.si].moves.push(JSON.parse(JSON.stringify(ex)));
+  closeModal();toast('Added to library + day');renderBuildCanvas();
+  try{ await apiPost('plan',{action:'save_library',metaProjectId:ATHLETE.metaProjectId,library:LIBRARY}); }catch(e){toast('Library sync failed');}
+}
+
+/* draft mutators */
+function toggleRest(ds){DRAFT[ds].rest=!DRAFT[ds].rest;if(DRAFT[ds].rest)DRAFT[ds].sessions=[];renderBuildCanvas();}
+function addSession(ds){DRAFT[ds].sessions=DRAFT[ds].sessions||[];const tag=DRAFT[ds].sessions.length===0?'AM':'PM';DRAFT[ds].sessions.push({tag,name:'',moves:[]});renderBuildCanvas();}
+function delSession(ds,si){DRAFT[ds].sessions.splice(si,1);renderBuildCanvas();}
+function setSessName(ds,si,v){DRAFT[ds].sessions[si].name=v;}
+function setSessTag(ds,si,t){DRAFT[ds].sessions[si].tag=t;renderBuildCanvas();}
+function delMove(ds,si,mi){DRAFT[ds].sessions[si].moves.splice(mi,1);renderBuildCanvas();}
+
+/* save the day to the server */
+async function saveDay(ds){
+  const draft=DRAFT[ds];
+  let badges=[];
+  if(draft.rest){badges=['Rest'];}
+  else{(draft.sessions||[]).forEach(s=>{const n=(s.name||'').toLowerCase();if(n.includes('strength'))badges.push('Strength');if(n.includes('charlotte'))badges.push('Charlotte');if(n.includes('cape'))badges.push('Cape');if(n.includes('sarasota'))badges.push('Sarasota');if(n.includes('sprint'))badges.push('Sprints');if(n.includes('roller'))badges.push('Roller');});
+    // also derive from move categories when name gives nothing
+    (draft.sessions||[]).forEach(s=>(s.moves||[]).forEach(m=>{if(m.cat==='Strength')badges.push('Strength');if(m.cat==='Roller')badges.push('Roller');if(m.cat==='Sprints')badges.push('Sprints');}));
+  }
+  if(!badges.length)badges=['Strength'];
+  badges=[...new Set(badges)];
+  const label=draft.rest?'Rest':(draft.sessions||[]).map(s=>s.name).filter(Boolean).join(' + ')||'Training';
+  const day={date:ds,label,badges,rest:!!draft.rest,note:draft.rest?(draft.note||'Rest day'):'',sessions:draft.rest?[]:(draft.sessions||[])};
+  toast('Saving…');
+  try{
+    await apiPost('plan',{action:'save_day',planProjectId:ATHLETE.planProjectId,day});
+    // refresh local summaries + cache
+    DAYS[ds]={gid:null,date:ds,label,badges,rest:!!draft.rest,note:day.note,skipped:(DAY_CACHE[ds]?DAY_CACHE[ds].skipped:{})||{},done:(DAY_CACHE[ds]?DAY_CACHE[ds].done:{})||{},feedback:(DAY_CACHE[ds]?DAY_CACHE[ds].feedback:'')||''};
+    DAY_CACHE[ds]=Object.assign({},DAYS[ds],{sessions:day.sessions});
+    toast('Saved — '+fmtDate(ds)+' is live on the calendar');
+    renderBuild();
+  }catch(e){ toast('Save failed — try again'); }
+}
+
+/* ════ EVENTS ════ */
+let evType='race',evCopyTo={};
+function openEventEditor(ds){
+  evType='race';evCopyTo={};evCopyTo[ATHLETE.id]=true;
+  // athletes the coach can copy to (coach sees all; parent sees their guarded set)
+  const others=SESSION.athletes;
+  let inner=`<div class="modal-grab"></div><h3>Add event</h3><div class="sub">Races, travel, camps — context the plan works around</div>
+    <div class="mv-edit-field"><label>Type</label></div>
+    <div class="mv-toggle-row" id="evTypeRow">${Object.keys(EVENT_TYPES).map((k)=>`<div class="mvt ${k==='race'?'on':''}" onclick="evTypePick(this,'${k}')">${EVENT_TYPES[k].label}</div>`).join('')}</div>
+    <div class="mv-edit-field"><label>Title</label><input id="evTitle" placeholder="e.g. State Championship — Orlando"></div>
+    <div class="mv-edit-field"><label>Start date</label><input id="evStart" type="date" value="${ds}"></div>
+    <div class="mv-edit-field"><label>End date (optional, for multi-day)</label><input id="evEnd" type="date" value=""></div>
+    ${others.length>1?`<div class="mv-edit-field"><label>Copy to athletes (shared events)</label></div>
+    <div class="copy-all" id="copyAll" onclick="toggleCopyAll()"><span class="ca-check" id="copyAllCheck"></span>Select all athletes</div>
+    <div class="copy-athletes" id="copyAthletes">${others.map(a=>`<div class="ca-item ${a.id===ATHLETE.id?'on':''}" data-aid="${a.id}" onclick="toggleCopy(this,'${a.id}')"><span class="ca-check">${a.id===ATHLETE.id?'✓':''}</span>${escapeHTML(a.name)}</div>`).join('')}</div>`:''}
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn save" onclick="saveEvent()">Add event</button></div>`;
+  document.getElementById('modalInner').innerHTML=inner;
+  document.getElementById('modalBg').classList.add('show');
+}
+function evTypePick(el,k){evType=k;[...document.getElementById('evTypeRow').children].forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+function toggleCopy(el,id){evCopyTo[id]=!evCopyTo[id];el.classList.toggle('on',evCopyTo[id]);el.querySelector('.ca-check').textContent=evCopyTo[id]?'✓':'';syncCopyAll();}
+function toggleCopyAll(){const others=SESSION.athletes;const all=others.every(a=>evCopyTo[a.id]);const next=!all;others.forEach(a=>{evCopyTo[a.id]=next;});[...document.getElementById('copyAthletes').children].forEach(el=>{el.classList.toggle('on',next);el.querySelector('.ca-check').textContent=next?'✓':'';});syncCopyAll();}
+function syncCopyAll(){const others=SESSION.athletes;const all=others.every(a=>evCopyTo[a.id]);const c=document.getElementById('copyAllCheck');if(c){c.textContent=all?'✓':'';document.getElementById('copyAll').classList.toggle('on',all);}}
+async function saveEvent(){
+  const title=document.getElementById('evTitle').value.trim();if(!title){toast('Give it a title');return;}
+  const start=document.getElementById('evStart').value, end=document.getElementById('evEnd').value||null;
+  const targets=Object.keys(evCopyTo).filter(k=>evCopyTo[k]);
+  const shared=targets.length>1;
+  closeModal();toast('Saving event…');
+  // add to current athlete locally
+  const ev={id:eventId++,date:start,end,type:evType,title,shared};
+  EVENTS.push(ev);renderBuild();
+  // persist to each targeted athlete's meta project
+  try{
+    for(const aid of targets){
+      const a=SESSION.athletes.find(x=>x.id===aid);if(!a)continue;
+      if(aid===ATHLETE.id){
+        await apiPost('plan',{action:'save_events',metaProjectId:a.metaProjectId,events:EVENTS});
+      }else{
+        // read that athlete's events, append, write back
+        const r=await apiGet('plan',{action:'events',metaProjectId:a.metaProjectId});
+        const list=(r.events||[]);const nid=list.reduce((m,e)=>Math.max(m,e.id||0),0)+1;
+        list.push({id:nid,date:start,end,type:evType,title,shared:true});
+        await apiPost('plan',{action:'save_events',metaProjectId:a.metaProjectId,events:list});
+      }
+    }
+    toast(shared?`Event added + copied to ${targets.length} athletes`:'Event added');
+  }catch(e){ toast('Event saved locally — sync failed'); }
+}
+async function delEvent(id){
+  EVENTS=EVENTS.filter(e=>e.id!==id);renderBuild();toast('Event removed');
+  try{ await apiPost('plan',{action:'save_events',metaProjectId:ATHLETE.metaProjectId,events:EVENTS}); }catch(e){toast('Sync failed');}
+}
+
+</script>
+</body>
+</html>
